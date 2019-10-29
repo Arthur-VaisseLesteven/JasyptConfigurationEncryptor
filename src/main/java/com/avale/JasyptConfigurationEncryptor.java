@@ -11,23 +11,30 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class JasyptConfigurationEncryptor extends Application {
+
+	private static final String APPLICATION_RESOURCE_BUNDLE_NAME = "jce_i18n";
+	private static final String APPLICATION_LOGO                 = "images/application_logo.png";
+	private static final String MAIN_VIEW                        = "views/main.fxml";
+
 	public static void main(String... program_arguments) {
 		launch(program_arguments);
 	}
 
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
-		FXMLLoader loader = new FXMLLoader();
-		loader.setResources(ResourceBundle.getBundle("jce_i18n"));
-		loader.setLocation(locate("views/main.fxml"));
-		Parent rootUiElement = loader.load();
+		ResourceBundle resourceBundle = ResourceBundle.getBundle(APPLICATION_RESOURCE_BUNDLE_NAME);
+		Parent rootGuiNode = loadMainView(locate(MAIN_VIEW), resourceBundle);
 
-		primaryStage.setTitle("Jasypt Configuration Encryptor");
-		URL iconUrl = locate("images/application_logo.png");
-		primaryStage.getIcons().add(new Image(iconUrl.toString()));
-		primaryStage.setScene(new Scene(rootUiElement));
-		primaryStage.setResizable(false);
+		configureAppDisplay(primaryStage, resourceBundle.getString("application.title"));
+		primaryStage.setScene(new Scene(rootGuiNode));
 		primaryStage.show();
+	}
+
+	private Parent loadMainView(URL viewLocation, ResourceBundle resourceBundle) throws java.io.IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(viewLocation);
+		loader.setResources(resourceBundle);
+		return loader.load();
 	}
 
 	/**
@@ -40,5 +47,11 @@ public class JasyptConfigurationEncryptor extends Application {
 		if(resourceLocation == null)throw new IllegalStateException("Failed to locate " + resourceIdentifier);
 
 		return resourceLocation;
+	}
+
+	private void configureAppDisplay(final Stage primaryStage, final String applicationTitle) {
+		URL iconUrl = locate(APPLICATION_LOGO);
+		primaryStage.getIcons().add(new Image(iconUrl.toString()));
+		primaryStage.setTitle(applicationTitle);
 	}
 }
