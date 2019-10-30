@@ -3,7 +3,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avale.controllers.MainController">
@@ -12,7 +12,16 @@
         <menus>
           <Menu mnemonicParsing="false" text="%menu.file">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="%menu.close" />
+                <MenuItem mnemonicParsing="false" onAction="#selectFileToOpen" text="%menu.open">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="%menu.close">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                    </accelerator>
+                </MenuItem>
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="%menu.help">
@@ -22,6 +31,6 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" />
+       <fx:include source="filesTab.fxml" fx:id="filesTab"/>
    </children>
 </VBox>
