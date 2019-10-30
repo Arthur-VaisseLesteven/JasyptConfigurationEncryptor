@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.avale.views.components.FilesTabPanel?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -31,6 +32,6 @@
           </Menu>
         </menus>
       </MenuBar>
-       <fx:include source="filesTab.fxml" fx:id="filesTab"/>
+       <FilesTabPanel fx:id="filesPanel" prefHeight="900.0" prefWidth="1280.0" tabClosingPolicy="UNAVAILABLE"/>
    </children>
 </VBox>

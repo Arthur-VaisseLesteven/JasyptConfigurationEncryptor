@@ -1,8 +1,10 @@
 package com.avale.controllers;
 
+import com.avale.views.components.FilesTabPanel;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -10,19 +12,11 @@ import java.io.File;
 public class MainController extends Controller {
 	public MainController() {}
 
-	/**
-	 * Dependency Injection constructor.
-	 * Used for testing purpose only as JavaFX uses a default constructor and then perform field injection.
-	 */
-	MainController(final FilesTabController filesTabController) {
-		this.filesTabController = filesTabController;
-	}
-
 	@FXML
-	private FilesTabController filesTabController;
+	private FilesTabPanel filesPanel;
 
 	public void initialize() {
-		validatesWiringOf(filesTabController, "filesTabController");
+		validateWiringOf(filesPanel, TabPane.class, "filesPanel");
 	}
 
 	/**
@@ -37,7 +31,7 @@ public class MainController extends Controller {
 	@FXML
 	private void selectFileToOpen(final ActionEvent actionEvent) {
 		File file = new FileChooser().showOpenDialog(null);
-		if (file != null) filesTabController.open(file);
+		if (file != null) filesPanel.open(file);
 	}
 
 }
