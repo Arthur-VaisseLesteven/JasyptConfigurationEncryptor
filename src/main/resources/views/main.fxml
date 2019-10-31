@@ -6,32 +6,25 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avale.controllers.MainController">
-   <children>
-      <MenuBar>
-        <menus>
-          <Menu mnemonicParsing="false" text="%menu.file">
-            <items>
-                <MenuItem mnemonicParsing="false" onAction="#selectFileToOpen" text="%menu.open">
-                    <accelerator>
-                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
-                    </accelerator>
-                </MenuItem>
-                <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="%menu.close">
-                    <accelerator>
-                        <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
-                    </accelerator>
-                </MenuItem>
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="%menu.help">
-            <items>
-              <MenuItem fx:id="menuAboutButton" mnemonicParsing="false" text="%menu.about" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-       <FilesTabPanel fx:id="filesPanel" prefHeight="900.0" prefWidth="1280.0" tabClosingPolicy="ALL_TABS">
-       </FilesTabPanel>
-   </children>
+<VBox xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.avale.controllers.MainController">
+    <MenuBar>
+        <Menu mnemonicParsing="false" text="%menu.file">
+            <MenuItem mnemonicParsing="false" onAction="#selectFileToOpen" text="%menu.open">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                </accelerator>
+            </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="%menu.close">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                </accelerator>
+            </MenuItem>
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menu.help">
+            <MenuItem fx:id="menuAboutButton" mnemonicParsing="false" text="%menu.about"/>
+        </Menu>
+    </MenuBar>
+    <FilesTabPanel fx:id="filesPanel" prefHeight="900.0" prefWidth="1280.0" tabClosingPolicy="ALL_TABS">
+    </FilesTabPanel>
 </VBox>
