@@ -10,10 +10,14 @@ import java.util.List;
 
 public class ConfigurationFile implements Configuration {
 
-	private List<String> configurationLines;
+	/** The file holding the configuration */
+	private final File         file;
+	/** The configuration file lines. */
+	private       List<String> configurationLines;
 
 	public ConfigurationFile(final File file) {
 		validatesInput(file);
+		this.file = file;
 		configurationLines = loadConfigurationContent(file);
 	}
 
@@ -33,8 +37,13 @@ public class ConfigurationFile implements Configuration {
 	}
 
 	@Override
-	public List<String> getConfigurationLines() {
+	public List<String> configurationLines() {
 		return Collections.unmodifiableList(configurationLines);
+	}
+
+	@Override
+	public String name() {
+		return file.getName();
 	}
 
 	/*

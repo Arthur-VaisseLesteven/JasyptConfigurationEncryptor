@@ -5,13 +5,17 @@ import com.avale.model.exception.InvalidFileException;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.URL;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ConfigurationTest {
+public class ConfigurationFileTest {
+
+	private static final String TEST_TEXT_FILE = "simpleText.txt";
 
 	@Test
 	public void constructor_failsUponFilesThatDoesNotExists() {
@@ -57,14 +61,23 @@ public class ConfigurationTest {
 
 	@Test
 	public void constructor_failsUponNonTextFile() {
-		assertThatThrownBy(() -> new ConfigurationFile(new File(getClass().getClassLoader().getResource("application_logo.png").getFile())))
+		assertThatThrownBy(() -> configurationBasedOnFile("application_logo.png"))
 				.isInstanceOf(InvalidFileException.class)
 				.hasMessage("error.file.content");
 	}
 
+	private ConfigurationFile configurationBasedOnFile(final String s) {
+		URL url = Objects.requireNonNull(getClass().getClassLoader().getResource(s), "Failed to find the test file.");
+		return new ConfigurationFile(new File(url.getFile()));
+	}
+
 	@Test
-	public void constructor_and_getConfigurationLines_worksUponTextFile() {
-		Configuration configuration = new ConfigurationFile(new File(getClass().getClassLoader().getResource("simpleText.txt").getFile()));
-		assertThat(configuration.getConfigurationLines()).containsExactly("there is", "two lines here");
+	public void constructor_and_configurationLines_worksUponTextFile() {
+		assertThat(configurationBasedOnFile(TEST_TEXT_FILE).configurationLines()).containsExactly("there is", "two lines here");
+	}
+
+	@Test
+	public void name_returnsTheFileName() {
+		assertThat(configurationBasedOnFile(TEST_TEXT_FILE).name()).isEqualTo(TEST_TEXT_FILE);
 	}
 }

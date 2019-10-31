@@ -16,8 +16,11 @@ class FileTab extends Tab {
 
 	FileTab(final Configuration configuration) {
 		super();
-		loadNodeHierarchy();
 		this.configuration = configuration;
+
+		loadNodeHierarchy();
+		this.setText(configuration.name());
+		this.setClosable(true);
 	}
 
 	private void loadNodeHierarchy() {
