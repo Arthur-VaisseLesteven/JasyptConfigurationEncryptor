@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TabPane?>
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-         prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1"
-         xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="com.avale.controllers.FilesTabController"
-         fx:id="fileTabPane"/>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.TextFlow?>
+
+<SplitPane dividerPositions="0.8" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+           minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.172-ea"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avale.controllers.FileTabController">
+    <items>
+        <TextFlow prefHeight="200.0" prefWidth="200.0"/>
+        <Accordion>
+            <panes>
+                <TitledPane animated="true" text="%sidebar.config.title">
+                    <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                            <children>
+                                <Label text="%sidebar.config.password"/>
+                                <TextField/>
+                                <Label text="%sidebar.config.iterations"/>
+                                <TextField/>
+                                <Label text="%sidebar.config.algorithm"/>
+                                <ChoiceBox prefWidth="150.0"/>
+                            </children>
+                        </VBox>
+                    </content>
+                </TitledPane>
+                <TitledPane animated="true" text="%sidebar.encryption.title"/>
+            </panes>
+        </Accordion>
+    </items>
+</SplitPane>
