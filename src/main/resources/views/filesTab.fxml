@@ -1,33 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <SplitPane dividerPositions="0.8" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
            minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.172-ea"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avale.controllers.FileTabController">
-    <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" wrapText="true">
+    <TextArea fx:id="configurationText" prefHeight="200.0" prefWidth="200.0" wrapText="true">
         <font>
             <Font name="Monospaced Regular" size="15.0"/>
         </font>
     </TextArea>
-    <VBox>
+    <VBox maxWidth="230.0">
         <TitledPane text="%sidebar.config.title">
             <VBox prefHeight="200.0" prefWidth="100.0">
                 <Label text="%sidebar.config.password"/>
-                <TextField/>
-                <Label text="%sidebar.config.iterations"/>
-                <TextField/>
-                <Label text="%sidebar.config.algorithm"/>
-                <ChoiceBox maxWidth="1.7976931348623157E308"/>
+                <TextField fx:id="masterPassword" promptText="%sidebar.config.hints.password"/>
+                <Label text="%sidebar.config.iterations">
+                    <VBox.margin>
+                        <Insets top="5.0"/>
+                    </VBox.margin>
+                </Label>
+                <TextField fx:id="encryptIteration" promptText="%sidebar.config.hints.iterations"/>
+                <Label text="%sidebar.config.algorithm">
+                    <VBox.margin>
+                        <Insets top="5.0"/>
+                    </VBox.margin>
+                </Label>
+                <ChoiceBox fx:id="algorithm" maxWidth="1.7976931348623157E308"/>
             </VBox>
         </TitledPane>
-        <TitledPane text="%sidebar.encryption.title"/>
+        <TitledPane text="%sidebar.encryption.title">
+            <content>
+                <VBox alignment="CENTER" spacing="5.0">
+                    <children>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#encryptSelection"
+                                text="%sidebar.actions.encryptSelection">
+                            <tooltip>
+                                <Tooltip text="%sidebar.actions.hints.encryptSelection"/>
+                            </tooltip>
+                        </Button>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#decryptSelection"
+                                text="%sidebar.actions.decryptSelection">
+                            <tooltip>
+                                <Tooltip text="%sidebar.actions.hints.decryptSelection"/>
+                            </tooltip>
+                        </Button>
+                    </children>
+                </VBox>
+            </content>
+        </TitledPane>
     </VBox>
 </SplitPane>
