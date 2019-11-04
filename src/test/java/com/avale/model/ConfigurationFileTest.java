@@ -72,8 +72,8 @@ public class ConfigurationFileTest {
 	}
 
 	@Test
-	public void constructor_and_configurationLines_worksUponTextFile() {
-		assertThat(configurationBasedOnFile(TEST_TEXT_FILE).configurationLines()).containsExactly("there is", "two lines here");
+	public void constructor_and_text_worksUponTextFile() {
+		assertThat(configurationBasedOnFile(TEST_TEXT_FILE).text()).isEqualTo("there is\ntwo lines here");
 	}
 
 	@Test

@@ -2,6 +2,7 @@ package com.avale.views.components;
 
 import com.avale.JasyptConfigurationEncryptor;
 import com.avale.ResourceLocator;
+import com.avale.controllers.FileTabController;
 import com.avale.model.Configuration;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,27 +13,24 @@ import java.util.ResourceBundle;
 
 class FileTab extends Tab {
 	public static final String        FILES_TAB_FXML = "views/filesTab.fxml";
-	private final       Configuration configuration;
 
 	FileTab(final Configuration configuration) {
 		super();
-		this.configuration = configuration;
 
-		loadNodeHierarchy();
-		this.setText(configuration.name());
-		this.setClosable(true);
-	}
-
-	private void loadNodeHierarchy() {
 		FXMLLoader loader = new FXMLLoader();
 		loader.setResources(ResourceBundle.getBundle(JasyptConfigurationEncryptor.APPLICATION_RESOURCE_BUNDLE_NAME));
 		loader.setLocation(new ResourceLocator().locate(FILES_TAB_FXML));
 
+		Node view;
 		try {
-			Node view = loader.load();
-			this.setContent(view);
+			view = loader.load();
 		} catch (IOException exception) {
 			throw new RuntimeException(exception);
 		}
+		this.setContent(view);
+		this.setText(configuration.name());
+		FileTabController controller = loader.getController();
+		controller.setConfiguration(configuration);
 	}
+
 }

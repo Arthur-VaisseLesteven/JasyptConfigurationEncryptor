@@ -1,11 +1,10 @@
 package com.avale.model;
 
-import java.util.List;
 
 public interface Configuration {
-	/** Contains the content of the Configuration, line by line. */
-	List<String> configurationLines();
+	/** @return the content of the Configuration. */
+	String text();
 
-	/** The name of this configuration. */
+	/** @return the name of this configuration. */
 	String name();
 }

@@ -1,24 +1,23 @@
 package com.avale.model;
 
+import com.avale.lang.Strings;
 import com.avale.model.exception.InvalidFileException;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.List;
 
 public class ConfigurationFile implements Configuration {
 
 	/** The file holding the configuration */
-	private final File         file;
+	private final File   file;
 	/** The configuration file lines. */
-	private       List<String> configurationLines;
+	private       String configurationText;
 
 	public ConfigurationFile(final File file) {
 		validatesInput(file);
 		this.file = file;
-		configurationLines = loadConfigurationContent(file);
+		configurationText = loadConfigurationContent(file);
 	}
 
 	private void validatesInput(final File file) {
@@ -27,9 +26,9 @@ public class ConfigurationFile implements Configuration {
 		if (!file.canWrite()) throw new InvalidFileException("error.file.nonWritable");
 	}
 
-	private List<String> loadConfigurationContent(final File file) {
+	private String loadConfigurationContent(final File file) {
 		try {
-			return Files.readAllLines(file.toPath());
+			return Strings.join(Files.readAllLines(file.toPath()), "\n");
 		} catch (IOException e) {
 			// this point is reached when opening non text file that can't be read line by line.
 			throw new InvalidFileException("error.file.content");
@@ -37,13 +36,13 @@ public class ConfigurationFile implements Configuration {
 	}
 
 	@Override
-	public List<String> configurationLines() {
-		return Collections.unmodifiableList(configurationLines);
+	public String name() {
+		return file.getName();
 	}
 
 	@Override
-	public String name() {
-		return file.getName();
+	public String text() {
+		return configurationText;
 	}
 
 	/*
