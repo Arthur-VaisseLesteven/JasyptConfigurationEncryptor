@@ -1,6 +1,7 @@
 package com.avale.controllers;
 
 import com.avale.model.Configuration;
+import com.avale.model.EncryptionSettings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -18,11 +19,19 @@ public class FileTabController extends Controller {
 	@FXML
 	TextField         masterPassword;
 
-	private Configuration configuration;
+    /**
+     * Model object of this controller.
+     */
+    private Configuration configuration;
 
-	@Override
-	void initialize() {
+    @Override
+    public void initialize() {
 		validateWiringOf(configurationText, TextArea.class, "file content text area");
+        validateWiringOf(algorithm, ChoiceBox.class, "algorithm drop down selector");
+        validateWiringOf(encryptIteration, TextField.class, "input used to select the number of iteration used during encryption");
+        validateWiringOf(masterPassword, TextField.class, "input used to select the password used for encryption");
+
+        algorithm.getItems().addAll(EncryptionSettings.availablePasswordBasedEncryptionAlgorithms());
 	}
 
 	public void setConfiguration(Configuration configuration) {

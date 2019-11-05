@@ -32,5 +32,4 @@ class FileTab extends Tab {
 		FileTabController controller = loader.getController();
 		controller.setConfiguration(configuration);
 	}
-
 }

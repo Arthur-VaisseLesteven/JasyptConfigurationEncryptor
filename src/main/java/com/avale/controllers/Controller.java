@@ -11,7 +11,7 @@ abstract class Controller {
 	/**
 	 * Method called after FXML fields injection. Should contains static behavior and binding of components.
 	 */
-	abstract void initialize();
+    public abstract void initialize();
 
 	/**
 	 * Validates the wiring to a sub UI element have been properly done, i.e. JavaFX properly injected it.
