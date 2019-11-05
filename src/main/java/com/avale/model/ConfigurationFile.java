@@ -6,6 +6,7 @@ import com.avale.model.exception.InvalidFileException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Optional;
 
 public class ConfigurationFile implements Configuration {
 
@@ -45,8 +46,13 @@ public class ConfigurationFile implements Configuration {
 		return configurationText;
 	}
 
+	@Override
+	public Optional<EncryptionSettings> encryptionSettings() {
+		return Optional.empty();
+	}
+
 	/*
-	this.masterKey = Objects.requireNonNull(masterKey, "The provided master key should not be null.");
+	this.masterKey = HasFieldBasedEquality.requireNonNull(masterKey, "The provided master key should not be null.");
 	SimpleStringPBEConfig config = new SimpleStringPBEConfig();
 	config.setPassword(this.masterKey);
 	config.setSaltGenerator(new RandomSaltGenerator());
