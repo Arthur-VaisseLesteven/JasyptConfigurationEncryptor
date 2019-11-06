@@ -94,6 +94,10 @@ public class ConfigurationFile implements Configuration {
 		return Optional.ofNullable(encryptionSettings);
 	}
 
+	public boolean isTiedTo(File file) {
+		return this.file.equals(file);
+	}
+
 	/*
 	this.masterKey = HasFieldBasedEquality.requireNonNull(masterKey, "The provided master key should not be null.");
 	SimpleStringPBEConfig config = new SimpleStringPBEConfig();

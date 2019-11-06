@@ -3,19 +3,23 @@ package com.avale.views.components;
 import com.avale.JasyptConfigurationEncryptor;
 import com.avale.ResourceLocator;
 import com.avale.controllers.FileTabController;
-import com.avale.model.Configuration;
+import com.avale.model.ConfigurationFile;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Tab;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
 class FileTab extends Tab {
-	public static final String        FILES_TAB_FXML = "views/filesTab.fxml";
+	private static final String FILES_TAB_FXML = "views/filesTab.fxml";
 
-	FileTab(final Configuration configuration) {
+	private final ConfigurationFile configuration;
+
+	FileTab(final ConfigurationFile configuration) {
 		super();
+		this.configuration = configuration;
 
 		FXMLLoader loader = new FXMLLoader();
 		loader.setResources(ResourceBundle.getBundle(JasyptConfigurationEncryptor.APPLICATION_RESOURCE_BUNDLE_NAME));
@@ -31,5 +35,9 @@ class FileTab extends Tab {
 		this.setText(configuration.name());
 		FileTabController controller = loader.getController();
 		controller.setConfiguration(configuration);
+	}
+
+	public boolean contains(File file) {
+		return this.configuration.isTiedTo(file);
 	}
 }
