@@ -37,6 +37,23 @@ public class FileTabController extends Controller {
 	public void setConfiguration(Configuration configuration) {
 		this.configuration = configuration;
 		this.configurationText.setText(configuration.text());
+
+		configuration.encryptionSettings().ifPresent(this::applyPreviousEncryptionSettings);
+	}
+
+	private void applyPreviousEncryptionSettings(EncryptionSettings encryptionSettings) {
+		algorithm.setValue(encryptionSettings.algorithm());
+		encryptIteration.setText(String.valueOf(encryptionSettings));
+
+		preventSettingInconsistency();
+	}
+
+	/**
+	 * Disable edit on encryption settings to prevent user to mix different encryption settings among a single file which would then make it impossible to decipher.
+	 */
+	private void preventSettingInconsistency() {
+		algorithm.setDisable(true);
+		encryptIteration.setDisable(true);
 	}
 
 	@FXML
