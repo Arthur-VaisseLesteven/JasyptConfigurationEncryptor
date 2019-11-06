@@ -7,6 +7,8 @@ import java.io.File;
 
 public class FilesTabPanel extends TabPane {
 	public void open(final File file) {
-		this.getTabs().add(new FileTab(new ConfigurationFile(file)));
+		FileTab fileTab = new FileTab(new ConfigurationFile(file));
+		this.getTabs().add(fileTab);
+		this.getSelectionModel().select(fileTab);
 	}
 }
