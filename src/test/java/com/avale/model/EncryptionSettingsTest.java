@@ -2,6 +2,8 @@ package com.avale.model;
 
 import org.junit.Test;
 
+import java.util.Properties;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SuppressWarnings("ConstantConditions")
@@ -47,4 +49,16 @@ public class EncryptionSettingsTest {
     public void equals_returnsFalseUponAnotherInstanceWithDifferentFieldValues() {
         assertThat(anEncryptionSetting()).isNotEqualTo(new EncryptionSettings(anAlgorithm(), MASTER_PASSWORD, 200));
     }
+
+	@Test
+	public void propertiesConstructor_looksForExpectedFields() {
+		assertThat(new EncryptionSettings(properties())).isEqualTo(new EncryptionSettings("PBEWITHMD5ANDDES", null, 100));
+	}
+
+	private Properties properties() {
+		Properties properties = new Properties();
+		properties.put("encryption.settings.iterations", "100");
+		properties.put("encryption.settings.algorithm", "PBEWITHMD5ANDDES");
+		return properties;
+	}
 }

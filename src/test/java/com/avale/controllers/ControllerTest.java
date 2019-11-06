@@ -24,7 +24,7 @@ public class ControllerTest {
 
 	private static class DummyController extends Controller {
 		@Override
-		void initialize() {
+		public void initialize() {
 			// nothing to do, this is a dummy implementation
 		}
 	}

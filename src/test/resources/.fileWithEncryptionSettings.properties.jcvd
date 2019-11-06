@@ -1,0 +1,3 @@
+#Holds encryption settings for fileWithEncryptionSettings.properties
+encryption.settings.algorithm=PBEWITHMD5ANDDES
+encryption.settings.iterations=666

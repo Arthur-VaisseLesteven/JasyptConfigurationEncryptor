@@ -3,6 +3,7 @@ package com.avale.model;
 import java.security.Security;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
@@ -10,6 +11,8 @@ import java.util.stream.Collectors;
  */
 public class EncryptionSettings {
 
+    private static final String ALGORITHM_PROPERTY = "encryption.settings.algorithm";
+    private static final String ITERATIONS_PROPERTY = "encryption.settings.iterations";
     /**
      * The algorithm used to encrypt configuration
      */
@@ -23,10 +26,14 @@ public class EncryptionSettings {
      */
     private final int numberOfIteration;
 
-    public EncryptionSettings(final String algorithm, final String masterPassword, final int numberOfIteration) {
+    EncryptionSettings(final String algorithm, final String masterPassword, final int numberOfIteration) {
         this.algorithm = algorithm;
         this.masterPassword = masterPassword;
         this.numberOfIteration = numberOfIteration;
+    }
+
+    EncryptionSettings(Properties properties) {
+        this(properties.getProperty(ALGORITHM_PROPERTY), null, Integer.valueOf(properties.getProperty(ITERATIONS_PROPERTY)));
     }
 
     public String algorithm() {

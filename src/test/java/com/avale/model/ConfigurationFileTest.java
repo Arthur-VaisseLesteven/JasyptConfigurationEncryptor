@@ -16,6 +16,7 @@ import static org.mockito.Mockito.when;
 public class ConfigurationFileTest {
 
 	private static final String TEST_TEXT_FILE = "simpleText.txt";
+	private static final String TEST_FILE_WITH_ENCRYPTION_SETTINGS = "fileWithEncryptionSettings.properties";
 
 	@Test
 	public void constructor_failsUponFilesThatDoesNotExists() {
@@ -74,6 +75,16 @@ public class ConfigurationFileTest {
 	@Test
 	public void constructor_and_text_worksUponTextFile() {
 		assertThat(configurationBasedOnFile(TEST_TEXT_FILE).text()).isEqualTo("there is\ntwo lines here");
+	}
+
+	@Test
+	public void constructor_letEmptyEncryptionSettingsWhenNoneAreDefined() {
+		assertThat(configurationBasedOnFile(TEST_TEXT_FILE).encryptionSettings()).isEmpty();
+	}
+
+	@Test
+	public void constructor_retrievesExistingEncryptionSettings() {
+		assertThat(configurationBasedOnFile(TEST_FILE_WITH_ENCRYPTION_SETTINGS).encryptionSettings()).contains(new EncryptionSettings("PBEWITHMD5ANDDES", null, 666));
 	}
 
 	@Test
