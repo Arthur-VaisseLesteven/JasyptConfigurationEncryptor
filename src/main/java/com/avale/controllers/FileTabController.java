@@ -2,9 +2,12 @@ package com.avale.controllers;
 
 import com.avale.model.Configuration;
 import com.avale.model.EncryptionSettings;
+import com.avale.model.encryptors.SimpleEncryptor;
+import com.avale.model.encryptors.SimpleSelection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.IndexRange;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -57,8 +60,28 @@ public class FileTabController extends Controller {
 	}
 
 	@FXML
-	private void encryptSelection(final ActionEvent actionEvent) {
+	private void encryptSelection() {
+		if (encryptionSettingsAreValid()) {
+			preventSettingInconsistency();
+			new SimpleEncryptor(currentSelection()).encrypt(configuration, getEncryptionSettings());
+		}
+	}
 
+	private boolean encryptionSettingsAreValid() {
+		boolean thereIsAnAlgorithm = !algorithm.getSelectionModel().isEmpty();
+		boolean thereIsAMasterPassword = !masterPassword.getText().isEmpty();
+		return thereIsAnAlgorithm && thereIsAMasterPassword;
+	}
+
+	private SimpleSelection currentSelection() {
+		IndexRange selection = configurationText.getSelection();
+		return new SimpleSelection(selection.getStart(), selection.getEnd());
+	}
+
+	private EncryptionSettings getEncryptionSettings() {
+		String rawIterations = encryptIteration.getText();
+		int numberOfIteration = rawIterations.isEmpty() ? 1000 : Integer.parseInt(rawIterations);
+		return new EncryptionSettings(algorithm.getValue(), masterPassword.getText(), numberOfIteration);
 	}
 
 	@FXML

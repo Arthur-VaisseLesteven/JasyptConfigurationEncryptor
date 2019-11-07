@@ -98,21 +98,8 @@ public class ConfigurationFile implements Configuration {
 		return this.file.equals(file);
 	}
 
-	/*
-	this.masterKey = HasFieldBasedEquality.requireNonNull(masterKey, "The provided master key should not be null.");
-	SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-	config.setPassword(this.masterKey);
-	config.setSaltGenerator(new RandomSaltGenerator());
-	config.setIvGenerator(new RandomIVGenerator());
-	config.setKeyObtentionIterations(KEY_OBTENTATION_ITERATIONS);
-
-	Puis :
-
-	StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-	encryptor.setConfig(config);
-	encryptor.setAlgorithm(ENCRYPTION_ALGORITHM);
-
-	Puis a chaque String a chiffrer :
-	remplace par "ENC(" + encryptor.encrypt(pValue) + ")"
-	 */
+	@Override
+	public String toString() {
+		return "ConfigurationFile{" + this.name() + "}";
+	}
 }

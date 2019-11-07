@@ -26,7 +26,7 @@ public class EncryptionSettings {
      */
     private final int numberOfIteration;
 
-    EncryptionSettings(final String algorithm, final String masterPassword, final int numberOfIteration) {
+	public EncryptionSettings(final String algorithm, final String masterPassword, final int numberOfIteration) {
         this.algorithm = algorithm;
         this.masterPassword = masterPassword;
         this.numberOfIteration = numberOfIteration;
@@ -48,7 +48,16 @@ public class EncryptionSettings {
         return numberOfIteration;
     }
 
-    @Override
+	@Override
+	public String toString() {
+		return "EncryptionSettings{" +
+				"algorithm='" + algorithm + '\'' +
+				", masterPassword='" + masterPassword + '\'' +
+				", numberOfIteration=" + numberOfIteration +
+				'}';
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
