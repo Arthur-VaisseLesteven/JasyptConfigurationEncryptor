@@ -94,6 +94,11 @@ public class ConfigurationFile implements Configuration {
 		return Optional.ofNullable(encryptionSettings);
 	}
 
+	@Override
+	public void apply(Replacement replacement) {
+		configurationText = replacement.applyOn(configurationText);
+	}
+
 	public boolean isTiedTo(File file) {
 		return this.file.equals(file);
 	}

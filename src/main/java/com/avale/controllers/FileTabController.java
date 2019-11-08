@@ -2,14 +2,11 @@ package com.avale.controllers;
 
 import com.avale.model.Configuration;
 import com.avale.model.EncryptionSettings;
-import com.avale.model.encryptors.SimpleEncryptor;
-import com.avale.model.encryptors.SimpleSelection;
+import com.avale.model.SimpleConfigurationEncryptor;
+import com.avale.model.SimpleSelection;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.IndexRange;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 
 public class FileTabController extends Controller {
@@ -35,6 +32,7 @@ public class FileTabController extends Controller {
         validateWiringOf(masterPassword, TextField.class, "input used to select the password used for encryption");
 
         algorithm.getItems().addAll(EncryptionSettings.availablePasswordBasedEncryptionAlgorithms());
+		// TODO : make password not clearly displayed. Maybe use a formatter ?
 	}
 
 	public void setConfiguration(Configuration configuration) {
@@ -63,7 +61,9 @@ public class FileTabController extends Controller {
 	private void encryptSelection() {
 		if (encryptionSettingsAreValid()) {
 			preventSettingInconsistency();
-			new SimpleEncryptor(currentSelection()).encrypt(configuration, getEncryptionSettings());
+			new SimpleConfigurationEncryptor().encrypt(currentSelection(), configuration, getEncryptionSettings());
+		} else {
+			//TODO gives the user a feedback !
 		}
 	}
 

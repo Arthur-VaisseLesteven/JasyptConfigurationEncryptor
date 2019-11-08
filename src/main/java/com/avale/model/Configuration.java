@@ -16,4 +16,9 @@ public interface Configuration {
 	 * @return The encryption setting used to encrypt this configuration file, if any, otherwise empty.
 	 */
 	Optional<EncryptionSettings> encryptionSettings();
+
+	/**
+	 * Order the given configuration to update it state
+	 */
+	void apply(Replacement replacement);
 }

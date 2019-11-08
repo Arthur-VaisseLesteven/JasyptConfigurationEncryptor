@@ -91,4 +91,11 @@ public class ConfigurationFileTest {
 	public void name_returnsTheFileName() {
 		assertThat(configurationBasedOnFile(TEST_TEXT_FILE).name()).isEqualTo(TEST_TEXT_FILE);
 	}
+
+	@Test
+	public void applyOn_correctlyReplaceContentInText() {
+		ConfigurationFile configurationFile = configurationBasedOnFile(TEST_TEXT_FILE);
+		configurationFile.apply(new Replacement(0, 18, "armadillo is"));
+		assertThat(configurationFile.text()).isEqualTo("armadillo is here");
+	}
 }
