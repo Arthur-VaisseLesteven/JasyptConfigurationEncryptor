@@ -2,10 +2,11 @@ package com.avale.model;
 
 import com.avale.lang.Strings;
 
-import java.util.Arrays;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class TestConfiguration implements Configuration {
+
 	public static class Builder {
 		private String text;
 		private String name;
@@ -38,6 +39,7 @@ public class TestConfiguration implements Configuration {
 	private String text;
 	private final String name;
 	private final EncryptionSettings settings;
+	private Collection<Consumer<Replacement>> listeners = new ArrayList<>();
 
 	private TestConfiguration(String text, String name, EncryptionSettings settings) {
 		this.text = text;
@@ -63,5 +65,10 @@ public class TestConfiguration implements Configuration {
 	@Override
 	public void apply(Replacement replacement) {
 		this.text = replacement.applyOn(text);
+	}
+
+	@Override
+	public void onContentReplacement(Consumer<Replacement> applyReplacement) {
+		this.listeners.add(applyReplacement);
 	}
 }

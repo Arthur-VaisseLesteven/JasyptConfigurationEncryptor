@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class ConfigurationFile implements Configuration {
 
@@ -22,6 +22,10 @@ public class ConfigurationFile implements Configuration {
 	 * The encryption settings used to encrypt configurations inside this file.
 	 */
 	private EncryptionSettings encryptionSettings;
+	/**
+	 * The listeners to notify upon configuration text change.
+	 */
+	private Collection<Consumer<Replacement>> listeners = new ArrayList<>();
 
 	public ConfigurationFile(final File file) {
 		validatesInput(file);
@@ -97,6 +101,11 @@ public class ConfigurationFile implements Configuration {
 	@Override
 	public void apply(Replacement replacement) {
 		configurationText = replacement.applyOn(configurationText);
+	}
+
+	@Override
+	public void onContentReplacement(Consumer<Replacement> applyReplacement) {
+		this.listeners.add(applyReplacement);
 	}
 
 	public boolean isTiedTo(File file) {

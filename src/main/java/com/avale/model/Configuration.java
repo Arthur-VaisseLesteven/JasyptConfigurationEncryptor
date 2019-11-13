@@ -2,6 +2,7 @@ package com.avale.model;
 
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public interface Configuration {
 	/** @return the content of the Configuration. */
@@ -21,4 +22,11 @@ public interface Configuration {
 	 * Order the given configuration to update it state
 	 */
 	void apply(Replacement replacement);
+
+	/**
+	 * Register a listener of {@link Replacement} on the configuration content.
+	 *
+	 * @param applyReplacement The listener method to call upon replacement.
+	 */
+	void onContentReplacement(Consumer<Replacement> applyReplacement);
 }

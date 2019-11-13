@@ -1,9 +1,6 @@
 package com.avale.controllers;
 
-import com.avale.model.Configuration;
-import com.avale.model.EncryptionSettings;
-import com.avale.model.SimpleConfigurationEncryptor;
-import com.avale.model.SimpleSelection;
+import com.avale.model.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -40,6 +37,11 @@ public class FileTabController extends Controller {
 		this.configurationText.setText(configuration.text());
 
 		configuration.encryptionSettings().ifPresent(this::applyPreviousEncryptionSettings);
+		configuration.onContentReplacement(this::applyReplacement);
+	}
+
+	private void applyReplacement(final Replacement replacement) {
+		this.configurationText.setText(replacement.applyOn(this.configurationText.getText()));
 	}
 
 	private void applyPreviousEncryptionSettings(EncryptionSettings encryptionSettings) {
