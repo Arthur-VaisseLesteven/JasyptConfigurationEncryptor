@@ -40,8 +40,8 @@ public class FileTabController extends Controller {
 		configuration.onContentReplacement(this::applyReplacement);
 	}
 
-	private void applyReplacement(final Replacement replacement) {
-		this.configurationText.setText(replacement.applyOn(this.configurationText.getText()));
+	private void applyReplacement(final ConfigurationChange change) {
+		this.configurationText.setText(change.finalValue);
 	}
 
 	private void applyPreviousEncryptionSettings(EncryptionSettings encryptionSettings) {

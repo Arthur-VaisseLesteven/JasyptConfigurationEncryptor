@@ -5,7 +5,7 @@ import com.avale.lang.Strings;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class TestConfiguration implements Configuration {
+public class TestConfiguration extends BaseConfiguration {
 
 	public static class Builder {
 		private String text;
@@ -31,7 +31,7 @@ public class TestConfiguration implements Configuration {
 			return this;
 		}
 
-		Configuration build() {
+		TestConfiguration build() {
 			return new TestConfiguration(this.text, this.name, this.settings);
 		}
 	}
@@ -39,12 +39,14 @@ public class TestConfiguration implements Configuration {
 	private String text;
 	private final String name;
 	private final EncryptionSettings settings;
-	private Collection<Consumer<Replacement>> listeners = new ArrayList<>();
+	private List<ConfigurationChange> changes = new ArrayList<>();
 
 	private TestConfiguration(String text, String name, EncryptionSettings settings) {
 		this.text = text;
 		this.name = name;
 		this.settings = settings;
+
+		this.onContentReplacement(changes::add);
 	}
 
 	@Override
@@ -63,12 +65,11 @@ public class TestConfiguration implements Configuration {
 	}
 
 	@Override
-	public void apply(Replacement replacement) {
-		this.text = replacement.applyOn(text);
+	protected void setText(String configuration) {
+		this.text = configuration;
 	}
 
-	@Override
-	public void onContentReplacement(Consumer<Replacement> applyReplacement) {
-		this.listeners.add(applyReplacement);
+	public List<ConfigurationChange> changeHistory() {
+		return Collections.unmodifiableList(changes);
 	}
 }

@@ -28,5 +28,5 @@ public interface Configuration {
 	 *
 	 * @param applyReplacement The listener method to call upon replacement.
 	 */
-	void onContentReplacement(Consumer<Replacement> applyReplacement);
+	void onContentReplacement(Consumer<ConfigurationChange> applyReplacement);
 }
