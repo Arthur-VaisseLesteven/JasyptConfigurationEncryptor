@@ -1,6 +1,6 @@
 package com.avale.model;
 
-import com.avale.lang.Strings;
+import com.avale.lang.strings.StringJoiner;
 import com.avale.model.exception.InvalidFileException;
 
 import java.io.File;
@@ -37,7 +37,7 @@ public class ConfigurationFile extends BaseConfiguration {
 
 	private String loadConfigurationContent(final File file) {
 		try {
-			return Strings.join(Files.readAllLines(file.toPath()), "\n");
+			return new StringJoiner("\n").join(Files.readAllLines(file.toPath()));
 		} catch (IOException e) {
 			// this point is reached when opening non text file that can't be read line by line.
 			throw new InvalidFileException("error.file.content");
