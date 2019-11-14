@@ -40,6 +40,9 @@ public class FileTabController extends Controller {
 		configuration.onContentReplacement(this::applyReplacement);
 	}
 
+	/**
+	 * This method is called upon configuration change.
+	 */
 	private void applyReplacement(final ConfigurationChange change) {
 		this.configurationText.setText(change.finalValue);
 	}
