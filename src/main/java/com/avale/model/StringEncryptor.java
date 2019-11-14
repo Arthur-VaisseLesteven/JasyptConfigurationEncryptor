@@ -8,6 +8,6 @@ interface StringEncryptor extends Function<String, String> {
 	}
 
 	static StringEncryptor basedOn(Function<String, String> encryptionMethod) {
-		return s -> format(encryptionMethod.apply(s));
+		return rawString -> format(encryptionMethod.apply(rawString));
 	}
 }

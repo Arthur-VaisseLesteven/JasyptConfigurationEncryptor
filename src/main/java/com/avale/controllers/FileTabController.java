@@ -88,6 +88,10 @@ public class FileTabController extends Controller {
 
 	@FXML
 	private void decryptSelection(final ActionEvent actionEvent) {
-
+		if (encryptionSettingsAreValid()) {
+			new SimpleConfigurationEncryptor().decrypt(currentSelection(), configuration, getEncryptionSettings());
+		} else {
+			// TODO gives the user a feedback
+		}
 	}
 }

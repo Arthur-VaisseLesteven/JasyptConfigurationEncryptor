@@ -21,6 +21,20 @@ public class SimpleConfigurationEncryptor {
 		configuration.apply(replacement);
 	}
 
+	/**
+	 * Decrypt's the selection of the configuration using the given encryption settings.
+	 */
+	public void decrypt(SimpleSelection simpleSelection, Configuration configuration, EncryptionSettings encryptionSettings) {
+		SimpleStringPBEConfig config = defaultEncryptionConfiguration();
+		applySettings(config, encryptionSettings);
+
+		StringDecryptor jceStringEncryptor = StringDecryptor.basedOn(standardJasyptStringEncryptor(encryptionSettings, config)::decrypt);
+
+		String decryptedSelection = jceStringEncryptor.apply(simpleSelection.applyOn(configuration));
+		Replacement replacement = new Replacement(simpleSelection.startIndex(), simpleSelection.endIndex(), decryptedSelection);
+		configuration.apply(replacement);
+	}
+
 	private SimpleStringPBEConfig defaultEncryptionConfiguration() {
 		SimpleStringPBEConfig pbeConfig = new SimpleStringPBEConfig();
 		pbeConfig.setSaltGenerator(new RandomSaltGenerator());
