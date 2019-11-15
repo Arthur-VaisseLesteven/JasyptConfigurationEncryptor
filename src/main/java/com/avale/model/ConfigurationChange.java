@@ -3,7 +3,7 @@ package com.avale.model;
 import java.util.Objects;
 
 public class ConfigurationChange {
-	public final Replacement replacement;
+	private final Replacement replacement;
 	public final String initialValue;
 	public final String finalValue;
 
@@ -16,6 +16,10 @@ public class ConfigurationChange {
 
 	static ConfigurationChange applyingReplacementOn(Replacement replacement, String configurationText) {
 		return new ConfigurationChange(replacement, configurationText, replacement.applyOn(configurationText));
+	}
+
+	static ConfigurationChange reverting(ConfigurationChange configurationChange) {
+		return new ConfigurationChange(configurationChange.replacement, configurationChange.finalValue, configurationChange.initialValue);
 	}
 
 	@Override

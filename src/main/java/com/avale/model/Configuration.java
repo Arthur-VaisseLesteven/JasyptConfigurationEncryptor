@@ -4,7 +4,7 @@ package com.avale.model;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-public interface Configuration {
+public interface Configuration extends RevertableChanges {
 	/** @return the content of the Configuration. */
 	String text();
 

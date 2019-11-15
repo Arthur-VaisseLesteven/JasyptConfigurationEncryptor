@@ -100,10 +100,12 @@ public class FileTabController extends Controller {
 
 	@FXML
 	public void revertLastChange() {
+		configuration.undoLastChange();
 	}
 
 	@FXML
 	public void redoLastRevertedChange() {
+		configuration.redoLastRevertedChange();
 	}
 
 	@FXML
