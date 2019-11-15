@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -21,6 +22,26 @@
         </font>
     </TextArea>
     <VBox maxWidth="230.0">
+        <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <!-- TODO : Replace button content by icons -->
+            <items>
+                <Button mnemonicParsing="false" onAction="#revertLastChange" text="◄">
+                    <tooltip>
+                        <Tooltip text="%menu.undo"/>
+                    </tooltip>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#redoLastRevertedChange" text="►">
+                    <tooltip>
+                        <Tooltip text="%menu.redo"/>
+                    </tooltip>
+                </Button>
+                <Button mnemonicParsing="false" onAction="#saveConfiguration" text="Save">
+                    <tooltip>
+                        <Tooltip text="%menu.save"/>
+                    </tooltip>
+                </Button>
+            </items>
+        </ToolBar>
         <TitledPane text="%sidebar.config.title">
             <VBox prefHeight="200.0" prefWidth="100.0">
                 <Label text="%sidebar.config.password"/>

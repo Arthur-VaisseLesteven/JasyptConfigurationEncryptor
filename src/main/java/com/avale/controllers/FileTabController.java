@@ -97,4 +97,16 @@ public class FileTabController extends Controller {
 			// TODO gives the user a feedback
 		}
 	}
+
+	@FXML
+	public void revertLastChange() {
+	}
+
+	@FXML
+	public void redoLastRevertedChange() {
+	}
+
+	@FXML
+	public void saveConfiguration() {
+	}
 }
