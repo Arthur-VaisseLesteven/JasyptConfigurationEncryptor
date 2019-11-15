@@ -2,7 +2,6 @@ package com.avale.controllers;
 
 import com.avale.views.components.FilesTabPanel;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
@@ -29,7 +28,7 @@ public class MainController extends Controller {
 	}
 
 	@FXML
-	private void selectFileToOpen(final ActionEvent actionEvent) {
+	private void selectFileToOpen() {
 		File file = new FileChooser().showOpenDialog(null);
 		if (file != null) filesPanel.open(file);
 	}

@@ -16,7 +16,7 @@ public class Replacement {
 		this.replacement = replacement;
 	}
 
-	public String applyOn(final String content) {
+	String applyOn(final String content) {
 		return content.substring(0, fragmentToReplaceStart) + replacement + content.substring(fragmentToReplaceEnd);
 	}
 

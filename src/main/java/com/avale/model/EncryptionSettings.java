@@ -40,11 +40,11 @@ public class EncryptionSettings {
         return algorithm;
     }
 
-    public String masterPassword() {
+    String masterPassword() {
         return masterPassword;
     }
 
-    public int getNumberOfIteration() {
+    int getNumberOfIteration() {
         return numberOfIteration;
     }
 

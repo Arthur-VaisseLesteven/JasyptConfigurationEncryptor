@@ -1,8 +1,5 @@
 package com.avale.model;
 
-import com.avale.model.Configuration;
-import com.avale.model.Selection;
-
 /**
  * Represent a simple single selection in a text. It defined a substring of the Selected text.
  * For example a SimpleSelection(0, 3) applied on "FooBar" selects "Foo".
