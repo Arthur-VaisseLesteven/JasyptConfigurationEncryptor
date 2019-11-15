@@ -22,18 +22,6 @@
                 </accelerator>
             </MenuItem>
         </Menu>
-        <Menu mnemonicParsing="false" text="%menu.edit">
-            <MenuItem fx:id="menuUndoButton" mnemonicParsing="false" text="%menu.undo">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
-                </accelerator>
-            </MenuItem>
-            <MenuItem fx:id="menuRedoButton" mnemonicParsing="false" text="%menu.redo">
-                <accelerator>
-                    <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="DOWN" shortcut="UP"/>
-                </accelerator>
-            </MenuItem>
-        </Menu>
         <Menu mnemonicParsing="false" text="%menu.help">
             <MenuItem fx:id="menuAboutButton" mnemonicParsing="false" text="%menu.about"/>
         </Menu>
