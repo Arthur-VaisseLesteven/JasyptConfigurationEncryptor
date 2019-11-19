@@ -110,5 +110,6 @@ public class FileTabController extends Controller {
 
 	@FXML
 	public void saveConfiguration() {
+		configuration.save();
 	}
 }

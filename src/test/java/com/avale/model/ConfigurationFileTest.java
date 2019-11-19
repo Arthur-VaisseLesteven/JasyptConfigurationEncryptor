@@ -2,14 +2,21 @@ package com.avale.model;
 
 
 import com.avale.model.exception.InvalidFileException;
+import org.assertj.core.api.Assertions;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -92,10 +99,39 @@ public class ConfigurationFileTest {
 		assertThat(configurationBasedOnFile(TEST_TEXT_FILE).name()).isEqualTo(TEST_TEXT_FILE);
 	}
 
+	@Rule
+	public TemporaryFolder temporaryFolder = new TemporaryFolder(); // as save update file content we will work on temporary files
+
 	@Test
-	public void applyOn_correctlyReplaceContentInText() {
+	public void save_correctlyFlushUpdatedConfigurationToFile() {
 		ConfigurationFile configurationFile = configurationBasedOnFile(TEST_TEXT_FILE);
-		configurationFile.apply(new Replacement(0, 18, "armadillo is"));
-		assertThat(configurationFile.text()).isEqualTo("armadillo is here");
+
+		runOnCloneOf(configurationFile, (configuration, fileBackingTheConfiguration) -> {
+			configuration.apply(new Replacement(0, 3, "ENC(FOO)"));
+			configuration.save();
+
+			Assertions.assertThat(fileBackingTheConfiguration).hasContent(configuration.text());
+		});
+	}
+
+	/**
+	 * Runs the given {@code testingProcess} on a copy of the {@code configurationFile} backed by a temporary file.
+	 * Aims at providing a testing framework for test which alters the {@link ConfigurationFile} file.
+	 */
+	private void runOnCloneOf(ConfigurationFile configurationFile, ConfigurationFileTestProcessRunningOnTemporaryFile testingProcess) {
+		try {
+			File cloneFile = temporaryFolder.newFile(configurationFile.name());
+			Files.write(cloneFile.toPath(), configurationFile.text().getBytes(StandardCharsets.UTF_8));
+
+			ConfigurationFile cloneBackedConfiguration = new ConfigurationFile(cloneFile);
+
+			testingProcess.run(cloneBackedConfiguration, cloneFile);
+		} catch (IOException ioException) {
+			fail("Failed the temporary folder setup");
+		}
+	}
+
+	public interface ConfigurationFileTestProcessRunningOnTemporaryFile {
+		void run(ConfigurationFile subjectUnderTest, File temporaryFileBackingTheCOnfiguration);
 	}
 }

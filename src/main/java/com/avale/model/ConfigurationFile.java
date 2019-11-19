@@ -1,14 +1,19 @@
 package com.avale.model;
 
 import com.avale.lang.strings.StringJoiner;
+import com.avale.model.exception.BusinessException;
 import com.avale.model.exception.InvalidFileException;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.FileAttributeView;
 import java.util.*;
 
 public class ConfigurationFile extends BaseConfiguration {
@@ -105,5 +110,16 @@ public class ConfigurationFile extends BaseConfiguration {
 	@Override
 	public String toString() {
 		return "ConfigurationFile{" + this.name() + "}";
+	}
+
+	@Override
+	public void save() {
+		try {
+			Path tempFile = Files.createTempFile(null, ".tmp");
+			Files.write(tempFile, this.text().getBytes(StandardCharsets.UTF_8));
+			Files.move(tempFile, this.file.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+		} catch (IOException ioException) {
+			throw new BusinessException("error.configuration.save", ioException);
+		}
 	}
 }

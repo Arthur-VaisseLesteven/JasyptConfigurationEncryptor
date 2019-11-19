@@ -29,4 +29,11 @@ public interface Configuration extends RevertableChanges {
 	 * @param applyReplacement The listener method to call upon replacement.
 	 */
 	void onContentReplacement(Consumer<ConfigurationChange> applyReplacement);
+
+	/**
+	 * Saves the {@link Replacement replacements} that were applied upon the configuration.
+	 *
+	 * @apiNote The logic applied upon call to this method, if any, depend upon the persistence layer used by the concrete implementation.
+	 */
+	void save();
 }

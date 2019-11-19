@@ -64,11 +64,16 @@ public class TestConfiguration extends BaseConfiguration {
 	}
 
 	@Override
+	public void save() {
+		// nothing to do as there is no persistence layer in this type of configuration.
+	}
+
+	@Override
 	protected void setText(String configuration) {
 		this.text = configuration;
 	}
 
-	public List<ConfigurationChange> changeHistory() {
+	List<ConfigurationChange> changeHistory() {
 		return Collections.unmodifiableList(changes);
 	}
 }
