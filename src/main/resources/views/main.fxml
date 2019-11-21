@@ -16,11 +16,27 @@
                     <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
                 </accelerator>
             </MenuItem>
+            <MenuItem mnemonicParsing="false" onAction="#save" text="%menu.save">
+                <accelerator>
+                    <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                </accelerator>
+            </MenuItem>
             <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="%menu.close">
                 <accelerator>
                     <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
                 </accelerator>
             </MenuItem>
+        </Menu>
+        <Menu mnemonicParsing="false" text="%menu.edit">
+            <items>
+                <MenuItem mnemonicParsing="false" text="%menu.undo"/>
+                <MenuItem mnemonicParsing="false" text="%menu.redo"/>
+                <Menu mnemonicParsing="false" text="Unspecified Menu">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Action 1"/>
+                    </items>
+                </Menu>
+            </items>
         </Menu>
         <Menu mnemonicParsing="false" text="%menu.help">
             <MenuItem fx:id="menuAboutButton" mnemonicParsing="false" text="%menu.about"/>

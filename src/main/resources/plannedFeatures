@@ -1,0 +1,11 @@
+fix build on github
+save meta data as well upon saving
+blocked multiple open file windows to be opened simultaneously
+change icon of open file feature
+reopen open windows in same place from time to time
+allow to select string to encrypt by regexp
+allow to edit configuration files
+user feedback on errors ( none should happen in truth! :) )
+hide password type in to only display dot or stars
+save password in metadata encrypted asking for a master password upon save/load :) ? does it sounds good ? :)
+use dedicated threads to proceed to encryption instead of stealing the main application thread!

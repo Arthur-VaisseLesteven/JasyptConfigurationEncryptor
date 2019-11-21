@@ -98,18 +98,15 @@ public class FileTabController extends Controller {
 		}
 	}
 
-	@FXML
-	public void revertLastChange() {
+	void revertLastChange() {
 		configuration.undoLastChange();
 	}
 
-	@FXML
-	public void redoLastRevertedChange() {
+	void redoLastRevertedChange() {
 		configuration.redoLastRevertedChange();
 	}
 
-	@FXML
-	public void saveConfiguration() {
+	void saveConfiguration() {
 		configuration.save();
 	}
 }

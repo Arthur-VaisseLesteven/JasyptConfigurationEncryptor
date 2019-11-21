@@ -16,6 +16,12 @@ class FileTab extends Tab {
 	private static final String FILES_TAB_FXML = "views/filesTab.fxml";
 
 	private final ConfigurationFile configuration;
+	private final FileTabController controller;
+
+	@Override
+	public String toString() {
+		return "FileTab{" + configuration.name() + '}';
+	}
 
 	FileTab(final ConfigurationFile configuration) {
 		super();
@@ -33,11 +39,15 @@ class FileTab extends Tab {
 		}
 		this.setContent(view);
 		this.setText(configuration.name());
-		FileTabController controller = loader.getController();
+		controller = loader.getController();
 		controller.setConfiguration(configuration);
 	}
 
-	public boolean contains(File file) {
+	boolean contains(File file) {
 		return this.configuration.isTiedTo(file);
+	}
+
+	public FileTabController controller() {
+		return controller;
 	}
 }

@@ -12,8 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.attribute.FileAttribute;
-import java.nio.file.attribute.FileAttributeView;
 import java.util.*;
 
 public class ConfigurationFile extends BaseConfiguration {

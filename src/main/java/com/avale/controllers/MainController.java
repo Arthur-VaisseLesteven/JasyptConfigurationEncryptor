@@ -2,6 +2,7 @@ package com.avale.controllers;
 
 import com.avale.views.components.FilesTabPanel;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
@@ -33,4 +34,18 @@ public class MainController extends Controller {
 		if (file != null) filesPanel.open(file);
 	}
 
+	@FXML
+	private void save() {
+		filesPanel.currentTabController().ifPresent(FileTabController::saveConfiguration);
+	}
+
+	@FXML
+	private void undo() {
+		filesPanel.currentTabController().ifPresent(FileTabController::revertLastChange);
+	}
+
+	@FXML
+	private void redo() {
+		filesPanel.currentTabController().ifPresent(FileTabController::redoLastRevertedChange);
+	}
 }
