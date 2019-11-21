@@ -41,9 +41,13 @@ public interface Configuration extends RevertableChanges {
 	 * Activate an optional feature on the configuration.
 	 */
 	void enable(ConfigurationFeatures saveMetaData);
-
 	/**
 	 * Deactivate an optional feature on the configuration.
 	 */
 	void disable(ConfigurationFeatures saveMetaData);
+
+	/**
+	 * Whether the given feature is enabled.
+	 */
+	boolean isEnabled(ConfigurationFeatures configurationFeatures);
 }

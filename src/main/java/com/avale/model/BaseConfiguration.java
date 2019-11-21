@@ -1,9 +1,6 @@
 package com.avale.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -62,13 +59,20 @@ public abstract class BaseConfiguration implements Configuration {
 		return source.isEmpty() ? Optional.empty() : Optional.of(destination.push(source.pop()));
 	}
 
+	private EnumSet<ConfigurationFeatures> activatedFeatures = EnumSet.noneOf(ConfigurationFeatures.class);
+
 	@Override
-	public void enable(ConfigurationFeatures saveMetaData) {
-		throw new UnsupportedOperationException("TODO : NYI");
+	public void enable(ConfigurationFeatures feature) {
+		activatedFeatures.add(feature);
 	}
 
 	@Override
-	public void disable(ConfigurationFeatures saveMetaData) {
-		throw new UnsupportedOperationException("TODO : NYI");
+	public void disable(ConfigurationFeatures feature) {
+		activatedFeatures.remove(feature);
+	}
+
+	@Override
+	public boolean isEnabled(ConfigurationFeatures feature) {
+		return activatedFeatures.contains(feature);
 	}
 }

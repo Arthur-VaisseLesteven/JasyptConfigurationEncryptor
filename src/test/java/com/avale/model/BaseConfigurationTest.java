@@ -106,4 +106,43 @@ public class BaseConfigurationTest {
 
 		assertThat(configuration.text()).isEqualTo(originalConfigurationContent);
 	}
+
+	@Test
+	public void enable_alreadyEnabledFeatureHasNoEffect() {
+		TestConfiguration configuration = configuration();
+		configuration.enable(aFeature());
+		assertThat(configuration.isEnabled(aFeature())).isTrue();
+		configuration.enable(aFeature());
+		assertThat(configuration.isEnabled(aFeature())).isTrue();
+	}
+
+	private ConfigurationFeatures aFeature() {
+		return ConfigurationFeatures.SAVE_META_DATA;
+	}
+
+	@Test
+	public void enable_disabledFeatureEnableIt() {
+		TestConfiguration configuration = configuration();
+		assertThat(configuration.isEnabled(aFeature())).isFalse();
+		configuration.enable(aFeature());
+		assertThat(configuration.isEnabled(aFeature())).isTrue();
+	}
+
+	@Test
+	public void disable_disabledFeatureHasNoEffect() {
+		TestConfiguration configuration = configuration();
+		assertThat(configuration.isEnabled(aFeature())).isFalse();
+		configuration.disable(aFeature());
+		assertThat(configuration.isEnabled(aFeature())).isFalse();
+	}
+
+	@Test
+	public void disable_enabledFeatureDisableIt() {
+		TestConfiguration configuration = configuration();
+		configuration.enable(aFeature());
+		assertThat(configuration.isEnabled(aFeature())).isTrue();
+		configuration.disable(aFeature());
+		assertThat(configuration.isEnabled(aFeature())).isFalse();
+	}
+
 }
