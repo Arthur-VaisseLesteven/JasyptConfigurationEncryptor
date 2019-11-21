@@ -36,4 +36,14 @@ public interface Configuration extends RevertableChanges {
 	 * @apiNote The logic applied upon call to this method, if any, depend upon the persistence layer used by the concrete implementation.
 	 */
 	void save();
+
+	/**
+	 * Activate an optional feature on the configuration.
+	 */
+	void enable(ConfigurationFeatures saveMetaData);
+
+	/**
+	 * Deactivate an optional feature on the configuration.
+	 */
+	void disable(ConfigurationFeatures saveMetaData);
 }

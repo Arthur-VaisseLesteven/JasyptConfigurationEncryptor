@@ -109,4 +109,16 @@ public class FileTabController extends Controller {
 	void saveConfiguration() {
 		configuration.save();
 	}
+
+	@FXML
+	CheckBox configMetadata;
+
+	@FXML
+	public void switchMetadataSaving() {
+		if (configMetadata.isSelected()) {
+			configuration.enable(ConfigurationFeatures.SAVE_META_DATA);
+		} else {
+			configuration.disable(ConfigurationFeatures.SAVE_META_DATA);
+		}
+	}
 }

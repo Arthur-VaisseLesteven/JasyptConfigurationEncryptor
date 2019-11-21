@@ -61,4 +61,14 @@ public abstract class BaseConfiguration implements Configuration {
 	private Optional<ConfigurationChange> moveConfigurationChange(Stack<ConfigurationChange> source, Stack<ConfigurationChange> destination) {
 		return source.isEmpty() ? Optional.empty() : Optional.of(destination.push(source.pop()));
 	}
+
+	@Override
+	public void enable(ConfigurationFeatures saveMetaData) {
+		throw new UnsupportedOperationException("TODO : NYI");
+	}
+
+	@Override
+	public void disable(ConfigurationFeatures saveMetaData) {
+		throw new UnsupportedOperationException("TODO : NYI");
+	}
 }
