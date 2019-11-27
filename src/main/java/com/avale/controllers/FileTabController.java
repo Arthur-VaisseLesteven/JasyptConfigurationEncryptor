@@ -49,7 +49,7 @@ public class FileTabController extends Controller {
 
 	private void applyPreviousEncryptionSettings(EncryptionSettings encryptionSettings) {
 		algorithm.setValue(encryptionSettings.algorithm());
-		encryptIteration.setText(String.valueOf(encryptionSettings));
+		encryptIteration.setText(String.valueOf(encryptionSettings.numberOfIteration()));
 
 		preventSettingInconsistency();
 	}

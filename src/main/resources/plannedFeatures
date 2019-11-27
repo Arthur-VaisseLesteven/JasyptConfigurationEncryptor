@@ -1,5 +1,5 @@
 fix build on github
-save meta data as well upon saving
+upon encryption failure caused by the selection of a too strong algorithm, do not lock encryption setting panel in UI
 blocked multiple open file windows to be opened simultaneously
 change icon of open file feature
 reopen open windows in same place from time to time

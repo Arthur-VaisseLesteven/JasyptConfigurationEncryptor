@@ -4,13 +4,11 @@ import com.avale.lang.strings.StringJoiner;
 import com.avale.model.exception.BusinessException;
 import com.avale.model.exception.InvalidFileException;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 
@@ -97,6 +95,11 @@ public class ConfigurationFile extends BaseConfiguration {
 	}
 
 	@Override
+	public void setEncryptionSettings(EncryptionSettings settings) {
+		encryptionSettings = settings;
+	}
+
+	@Override
 	protected void setText(String configurationText) {
 		this.configurationText = configurationText;
 	}
@@ -118,6 +121,14 @@ public class ConfigurationFile extends BaseConfiguration {
 			Files.move(tempFile, this.file.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
 		} catch (IOException ioException) {
 			throw new BusinessException("error.configuration.save", ioException);
+		}
+
+		if (isEnabled(ConfigurationFeatures.SAVE_META_DATA)) {
+			try (FileOutputStream outputStream = new FileOutputStream(findEncryptionSettingFile().orElse(Paths.get(this.file.getParent() + File.separator + this.encryptionSettingsFileName())).toFile())) {
+				encryptionSettings.toProperties().store(outputStream, null);
+			} catch (IOException exception) {
+				throw new IllegalStateException("Not Yet Implemented");
+			}
 		}
 	}
 }

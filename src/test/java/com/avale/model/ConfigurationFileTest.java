@@ -114,6 +114,24 @@ public class ConfigurationFileTest {
 		});
 	}
 
+	@Test
+	public void save_correctlyCreateMetaDataFileNextToTheConfigurationFileWhenSaveMetadataFeatureIsActivated() {
+		ConfigurationFile configurationFile = configurationBasedOnFile(TEST_TEXT_FILE);
+
+		EncryptionSettings encryptionSettings = new EncryptionSettings(EncryptionSettings.availablePasswordBasedEncryptionAlgorithms().get(0), "password", 10);
+		runOnCloneOf(configurationFile, (configuration, fileBackingTheConfiguration) -> {
+			// GIVEN a configuration supposed to save meta data
+			configuration.enable(ConfigurationFeatures.SAVE_META_DATA);
+			configuration.setEncryptionSettings(encryptionSettings);
+
+			// WHEN saving it
+			configuration.save();
+
+			// THEN encryption settings have been saved and are then retrieve upon opening of another configuration relying on the same file.
+			assertThat(new ConfigurationFile(fileBackingTheConfiguration).encryptionSettings()).contains(new EncryptionSettings(encryptionSettings.algorithm(), null, encryptionSettings.numberOfIteration()));
+		});
+	}
+
 	/**
 	 * Runs the given {@code testingProcess} on a copy of the {@code configurationFile} backed by a temporary file.
 	 * Aims at providing a testing framework for test which alters the {@link ConfigurationFile} file.

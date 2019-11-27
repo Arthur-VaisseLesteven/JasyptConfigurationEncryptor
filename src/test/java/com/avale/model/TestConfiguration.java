@@ -37,7 +37,7 @@ public class TestConfiguration extends BaseConfiguration {
 
 	private String text;
 	private final String name;
-	private final EncryptionSettings settings;
+	private EncryptionSettings settings;
 	private List<ConfigurationChange> changes = new ArrayList<>();
 
 	private TestConfiguration(String text, String name, EncryptionSettings settings) {
@@ -61,6 +61,11 @@ public class TestConfiguration extends BaseConfiguration {
 	@Override
 	public Optional<EncryptionSettings> encryptionSettings() {
 		return Optional.ofNullable(settings);
+	}
+
+	@Override
+	public void setEncryptionSettings(final EncryptionSettings settings) {
+		this.settings = settings;
 	}
 
 	@Override

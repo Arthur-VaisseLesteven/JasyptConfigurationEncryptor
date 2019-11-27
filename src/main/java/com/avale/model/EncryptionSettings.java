@@ -44,7 +44,7 @@ public class EncryptionSettings {
         return masterPassword;
     }
 
-    int getNumberOfIteration() {
+	public int numberOfIteration() {
         return numberOfIteration;
     }
 
@@ -71,6 +71,15 @@ public class EncryptionSettings {
     public int hashCode() {
         return Objects.hash(algorithm, masterPassword, numberOfIteration);
     }
+
+	Properties toProperties() {
+		Properties result = new Properties();
+
+		result.setProperty(ALGORITHM_PROPERTY, algorithm);
+		result.setProperty(ITERATIONS_PROPERTY, String.valueOf(numberOfIteration));
+
+		return result;
+	}
 
     /**
      * @return The password of all password based encryption algorithms.

@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 public interface Configuration extends RevertableChanges {
 	/** @return the content of the Configuration. */
 	String text();
-
 	/** @return the name of this configuration. */
 	String name();
 
@@ -19,16 +18,9 @@ public interface Configuration extends RevertableChanges {
 	Optional<EncryptionSettings> encryptionSettings();
 
 	/**
-	 * Order the given configuration to update it state
+	 * Set the encryption settings of this configuration. If already exists some, the call will throw an error.
 	 */
-	void apply(Replacement replacement);
-
-	/**
-	 * Register a listener of {@link Replacement} on the configuration content.
-	 *
-	 * @param applyReplacement The listener method to call upon replacement.
-	 */
-	void onContentReplacement(Consumer<ConfigurationChange> applyReplacement);
+	void setEncryptionSettings(EncryptionSettings settings);
 
 	/**
 	 * Saves the {@link Replacement replacements} that were applied upon the configuration.
@@ -36,6 +28,16 @@ public interface Configuration extends RevertableChanges {
 	 * @apiNote The logic applied upon call to this method, if any, depend upon the persistence layer used by the concrete implementation.
 	 */
 	void save();
+	/**
+	 * Order the given configuration to update it state
+	 */
+	void apply(Replacement replacement);
+	/**
+	 * Register a listener of {@link Replacement} on the configuration content.
+	 *
+	 * @param applyReplacement The listener method to call upon replacement.
+	 */
+	void onContentReplacement(Consumer<ConfigurationChange> applyReplacement);
 
 	/**
 	 * Activate an optional feature on the configuration.
@@ -45,7 +47,6 @@ public interface Configuration extends RevertableChanges {
 	 * Deactivate an optional feature on the configuration.
 	 */
 	void disable(ConfigurationFeatures saveMetaData);
-
 	/**
 	 * Whether the given feature is enabled.
 	 */

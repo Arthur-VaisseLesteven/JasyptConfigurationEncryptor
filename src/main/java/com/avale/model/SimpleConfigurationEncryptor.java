@@ -19,6 +19,7 @@ public class SimpleConfigurationEncryptor {
 		String encryptedSelection = jceStringEncryptor.apply(selection.applyOn(configuration));
 		Replacement replacement = new Replacement(selection.startIndex(), selection.endIndex(), encryptedSelection);
 		configuration.apply(replacement);
+		configuration.setEncryptionSettings(encryptionSettings);
 	}
 
 	/**
@@ -45,7 +46,7 @@ public class SimpleConfigurationEncryptor {
 
 	private void applySettings(SimpleStringPBEConfig config, EncryptionSettings settings) {
 		config.setPassword(settings.masterPassword());
-		config.setKeyObtentionIterations(settings.getNumberOfIteration());
+		config.setKeyObtentionIterations(settings.numberOfIteration());
 	}
 
 	private StandardPBEStringEncryptor standardJasyptStringEncryptor(EncryptionSettings encryptionSettings, SimpleStringPBEConfig pbeConfig) {
