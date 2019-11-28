@@ -7,6 +7,7 @@ import javafx.scene.control.TabPane;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.util.List;
 
 public class MainController extends Controller {
 
@@ -32,10 +33,10 @@ public class MainController extends Controller {
 
 	@FXML
 	private void selectFileToOpen() {
-		File file = fileChooser.showOpenDialog(null);
-		if (file != null) {
-			reopenFileChooserNextTimeInDirectoryOf(file);
-			filesPanel.open(file);
+		List<File> files = fileChooser.showOpenMultipleDialog(null);
+		if (files != null) {
+			files.forEach(filesPanel::open);
+			reopenFileChooserNextTimeInDirectoryOf(files.get(0));
 		}
 	}
 
