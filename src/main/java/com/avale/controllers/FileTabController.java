@@ -29,6 +29,7 @@ public class FileTabController extends Controller {
         validateWiringOf(masterPassword, TextField.class, "input used to select the password used for encryption");
 
         algorithm.getItems().addAll(EncryptionSettings.availablePasswordBasedEncryptionAlgorithms());
+		configurationText.setEditable(false);
 		// TODO : make password not clearly displayed. Maybe use a formatter ?
 	}
 
