@@ -9,10 +9,13 @@ import javafx.stage.FileChooser;
 import java.io.File;
 
 public class MainController extends Controller {
+
+
 	public MainController() {}
 
 	@FXML
 	private FilesTabPanel filesPanel;
+	private FileChooser fileChooser = new FileChooser();
 
 	public void initialize() {
 		validateWiringOf(filesPanel, TabPane.class, "filesPanel");
@@ -29,8 +32,15 @@ public class MainController extends Controller {
 
 	@FXML
 	private void selectFileToOpen() {
-		File file = new FileChooser().showOpenDialog(null);
-		if (file != null) filesPanel.open(file);
+		File file = fileChooser.showOpenDialog(null);
+		if (file != null) {
+			reopenFileChooserNextTimeInDirectoryOf(file);
+			filesPanel.open(file);
+		}
+	}
+
+	private void reopenFileChooserNextTimeInDirectoryOf(File file) {
+		fileChooser.setInitialDirectory(file.getParentFile());
 	}
 
 	@FXML
