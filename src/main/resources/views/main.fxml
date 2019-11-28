@@ -29,13 +29,16 @@
         </Menu>
         <Menu mnemonicParsing="false" text="%menu.edit">
             <items>
-                <MenuItem mnemonicParsing="false" text="%menu.undo"/>
-                <MenuItem mnemonicParsing="false" text="%menu.redo"/>
-                <Menu mnemonicParsing="false" text="Unspecified Menu">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Action 1"/>
-                    </items>
-                </Menu>
+                <MenuItem mnemonicParsing="false" onAction="#undo" text="%menu.undo">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="Z" control="DOWN" meta="UP" shift="DOWN" shortcut="UP"/>
+                    </accelerator>
+                </MenuItem>
+                <MenuItem mnemonicParsing="false" onAction="#redo" text="%menu.redo">
+                    <accelerator>
+                        <KeyCodeCombination alt="UP" code="Y" control="DOWN" meta="UP" shift="DOWN" shortcut="UP"/>
+                    </accelerator>
+                </MenuItem>
             </items>
         </Menu>
         <Menu mnemonicParsing="false" text="%menu.help">
