@@ -8,20 +8,31 @@ import javafx.scene.control.*;
 
 public class FileTabController extends Controller {
 	@FXML
-	TextArea          configurationText;
+	private TextArea configurationText;
 	@FXML
-	ChoiceBox<String> algorithm;
+	private ChoiceBox<String> algorithm;
 	@FXML
-	TextField         encryptIteration;
+	private TextField encryptIteration;
 	@FXML
-	TextField         masterPassword;
+	private TextField masterPassword;
 
-    /**
+	/**
      * Model object of this controller.
      */
     private Configuration configuration;
 
-    @Override
+	public FileTabController() {
+		super();
+	}
+
+	/**
+	 * Dependency Injection Constructor aiming at easing testing.
+	 */
+	protected FileTabController(TextArea configurationText, ChoiceBox<String> algorithm, TextField encryptIteration, TextField masterPassword) {
+
+	}
+
+	@Override
     public void initialize() {
 		validateWiringOf(configurationText, TextArea.class, "file content text area");
         validateWiringOf(algorithm, ChoiceBox.class, "algorithm drop down selector");
