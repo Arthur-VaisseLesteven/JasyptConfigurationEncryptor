@@ -11,11 +11,11 @@ import java.util.List;
 
 public class MainController extends Controller {
 
-
 	public MainController() {}
 
 	@FXML
 	private FilesTabPanel filesPanel;
+
 	private FileChooser fileChooser = new FileChooser();
 
 	public void initialize() {
