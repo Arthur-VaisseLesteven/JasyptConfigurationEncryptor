@@ -1,7 +1,8 @@
 fix build on github
-upon encryption failure caused by the selection of a too strong algorithm, do not lock encryption setting panel in UI
-blocked multiple open file windows to be opened simultaneously
+allow to change encryption setting on a loaded file whose all encrypted values have been decrypted.
+prevent multiple open file windows to be opened simultaneously
 change icon of open file feature
+change icon of alerts in case of encryption failure
 allow to select string to encrypt by regexp
 allow to edit configuration files
 user feedback on errors ( none should happen in truth! :) )

@@ -1,9 +1,13 @@
 package com.avale.controllers;
 
+import com.avale.JasyptConfigurationEncryptor;
 import com.avale.model.*;
+import com.avale.model.exception.BusinessException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+
+import java.util.ResourceBundle;
 
 
 public class FileTabController extends Controller {
@@ -15,11 +19,18 @@ public class FileTabController extends Controller {
 	private TextField encryptIteration;
 	@FXML
 	private TextField masterPassword;
+	@FXML
+	private CheckBox configMetadata;
 
 	/**
-     * Model object of this controller.
-     */
+	 * Model object of this controller.
+	 */
     private Configuration configuration;
+	/**
+	 * Indicates whether the encryption settings are frozen, and should not get editable again.
+	 * In case the configuration currently contains any encrypted property, then the settings are supposed to be frozen.
+	 */
+	private boolean encryptionSettingsAreFrozen = false;
 
 	public FileTabController() {
 		super();
@@ -44,6 +55,7 @@ public class FileTabController extends Controller {
 		// TODO : make password not clearly displayed. Maybe use a formatter ?
 	}
 
+	/** Called once the configuration to display have been loaded, whatever the way it have been loaded. */
 	public void setConfiguration(Configuration configuration) {
 		this.configuration = configuration;
 		this.configurationText.setText(configuration.text());
@@ -53,32 +65,51 @@ public class FileTabController extends Controller {
 	}
 
 	/**
-	 * This method is called upon configuration change.
+	 * Apply the existing encryption settings in case some were already existing prior the edition of the configuration.
+	 */
+	private void applyPreviousEncryptionSettings(EncryptionSettings encryptionSettings) {
+		this.encryptionSettingsAreFrozen = true; // as the configuration already contains encrypted content, we should not allow any change to encryption settings.
+		algorithm.setValue(encryptionSettings.algorithm());
+		encryptIteration.setText(String.valueOf(encryptionSettings.numberOfIteration()));
+
+		lockEncryptionSettingToPreventInconsistency();
+	}
+
+	/**
+	 * This method is called upon configuration content change.
 	 */
 	private void applyReplacement(final ConfigurationChange change) {
 		this.configurationText.setText(change.finalValue);
 	}
 
-	private void applyPreviousEncryptionSettings(EncryptionSettings encryptionSettings) {
-		algorithm.setValue(encryptionSettings.algorithm());
-		encryptIteration.setText(String.valueOf(encryptionSettings.numberOfIteration()));
-
-		preventSettingInconsistency();
-	}
-
 	/**
 	 * Disable edit on encryption settings to prevent user to mix different encryption settings among a single file which would then make it impossible to decipher.
 	 */
-	private void preventSettingInconsistency() {
+	private void lockEncryptionSettingToPreventInconsistency() {
 		algorithm.setDisable(true);
 		encryptIteration.setDisable(true);
+	}
+
+	/**
+	 * Unlock the encryption setting UI component in case the encryption settings are not frozen.
+	 */
+	private void unlockEncryptionSetting() {
+		if (!encryptionSettingsAreFrozen) {
+			algorithm.setDisable(false);
+			encryptIteration.setDisable(false);
+		}
 	}
 
 	@FXML
 	private void encryptSelection() {
 		if (encryptionSettingsAreValid()) {
-			preventSettingInconsistency();
-			new SimpleConfigurationEncryptor().encrypt(currentSelection(), configuration, getEncryptionSettings());
+			lockEncryptionSettingToPreventInconsistency();
+			try {
+				new SimpleConfigurationEncryptor().encrypt(currentSelection(), configuration, getEncryptionSettings());
+			} catch (BusinessException exception) {
+				unlockEncryptionSetting();
+				notifyActionFailure(exception);
+			}
 		} else {
 			//TODO gives the user a feedback !
 		}
@@ -101,6 +132,19 @@ public class FileTabController extends Controller {
 		return new EncryptionSettings(algorithm.getValue(), masterPassword.getText(), numberOfIteration);
 	}
 
+	private void notifyActionFailure(BusinessException exception) {
+		// it really annoy me to have to us ethe singleton pattern here while the controller was initialized by a loader having a reference on the resource bundle...
+		// TODO : find the proper javaFx way to perform that kind of localization...
+		ResourceBundle bundle = JasyptConfigurationEncryptor.getBundle();
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle(bundle.getString("error.title"));
+		alert.setHeaderText(bundle.getString(exception.getMessage()));
+		alert.setContentText(exception.getCause().toString());
+		exception.printStackTrace();
+
+		alert.show();
+	}
+
 	@FXML
 	private void decryptSelection(final ActionEvent actionEvent) {
 		if (encryptionSettingsAreValid()) {
@@ -121,9 +165,6 @@ public class FileTabController extends Controller {
 	void saveConfiguration() {
 		configuration.save();
 	}
-
-	@FXML
-	CheckBox configMetadata;
 
 	@FXML
 	public void switchMetadataSaving() {
