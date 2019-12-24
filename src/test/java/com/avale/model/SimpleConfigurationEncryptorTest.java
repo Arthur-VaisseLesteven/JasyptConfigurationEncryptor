@@ -1,8 +1,10 @@
 package com.avale.model;
 
+import com.avale.model.exception.EncryptionFailedException;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class SimpleConfigurationEncryptorTest {
 
@@ -10,15 +12,39 @@ public class SimpleConfigurationEncryptorTest {
 	private static final String PROPERTY_KEY = "property";
 	private static final String PROPERTY = PROPERTY_KEY + "=foo";
 
+
+	private SimpleConfigurationEncryptor configurationEncryptor = new SimpleConfigurationEncryptor();
+
 	@Test
 	public void encrypt_correctlyEncryptTheSelection() {
 		// GIVEN sample data
 		TestConfiguration configuration = singlePropertyConfiguration();
+
 		// WHEN encrypting the configuration
-		new SimpleConfigurationEncryptor().encrypt(propertySelection(), configuration, ENCRYPTION_SETTINGS);
-		// THEN the selection is now replaced by ENC(....) and the configuration knows the encryption settings tied to it.
+		configurationEncryptor.encrypt(propertySelection(), configuration, ENCRYPTION_SETTINGS);
+
+		// THEN the selection is now encrypted
 		assertThat(configuration.text()).matches(PROPERTY_KEY + "=ENC\\(.*\\)");
+		// AND the configuration is aware of the encryption settings used to encrypt it.
 		assertThat(configuration.encryptionSettings()).contains(ENCRYPTION_SETTINGS);
+	}
+
+	@Test
+	public void encrypt_throwEncryptionFailedExceptionWhenTooStrongAlgorithmIsChosen() {
+		// GIVEN sample data
+		TestConfiguration configuration = singlePropertyConfiguration();
+		// AND encryption setting that will lead to an error during encryption.
+		StringEncryptor brokenEncryptor = s -> {
+			throw new RuntimeException("Encryption Failed for whatever reason");
+		};
+		SimpleConfigurationEncryptor configurationEncryptor = new SimpleConfigurationEncryptor(encryptionSettings -> brokenEncryptor);
+
+		// WHEN encrypting the configuration
+		assertThatCode(() -> configurationEncryptor.encrypt(propertySelection(), configuration, ENCRYPTION_SETTINGS))
+				// THEN I got a business exception I will be able to catch in client code
+				.isInstanceOf(EncryptionFailedException.class)
+				// AND  that allows to trace back to its origin in case of need.
+				.hasRootCauseExactlyInstanceOf(RuntimeException.class);
 	}
 
 	private SimpleSelection propertySelection() {
@@ -32,11 +58,12 @@ public class SimpleConfigurationEncryptorTest {
 	@Test
 	public void decrypt_correctlyDecryptEncryptedSelection() {
 		// GIVEN sample encrypted data
-		SimpleConfigurationEncryptor simpleConfigurationEncryptor = new SimpleConfigurationEncryptor();
 		Configuration configuration = singlePropertyConfiguration();
-		simpleConfigurationEncryptor.encrypt(propertySelection(), configuration, ENCRYPTION_SETTINGS);
+		configurationEncryptor.encrypt(propertySelection(), configuration, ENCRYPTION_SETTINGS);
+
 		// WHEN decrypting them
-		simpleConfigurationEncryptor.decrypt(encryptedPropertySelection(configuration.text()), configuration, ENCRYPTION_SETTINGS);
+		configurationEncryptor.decrypt(encryptedPropertySelection(configuration.text()), configuration, ENCRYPTION_SETTINGS);
+
 		// THEN I got back the original content
 		assertThat(configuration.text()).isEqualTo(PROPERTY);
 	}
