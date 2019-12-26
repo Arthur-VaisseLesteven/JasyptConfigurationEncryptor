@@ -33,7 +33,7 @@ public class MainController extends Controller {
 
 	@FXML
 	private void selectFileToOpen() {
-		List<File> files = fileChooser.showOpenMultipleDialog(null);
+		List<File> files = fileChooser.showOpenMultipleDialog(this.filesPanel.getScene().getWindow());
 		if (files != null) {
 			files.forEach(filesPanel::open);
 			reopenFileChooserNextTimeInDirectoryOf(files.get(0));

@@ -1,11 +1,10 @@
 fix build on github
 allow to change encryption setting on a loaded file whose all encrypted values have been decrypted.
-prevent multiple open file windows to be opened simultaneously
-change icon of open file feature
-change icon of alerts in case of encryption failure
 allow to select string to encrypt by regexp
 allow to edit configuration files
-user feedback on errors ( none should happen in truth! :) )
+for encryption/decryption check the user actually selected something
+user feedback on decrypting errors
 hide password type in to only display dot or stars
 save password in metadata encrypted asking for a master password upon save/load :) ? does it sounds good ? :)
 use dedicated threads to proceed to encryption instead of stealing the main application thread!
+enhance readme to add some usage animated gifs....

@@ -2,11 +2,11 @@ package com.avale.controllers;
 
 import com.avale.model.*;
 import com.avale.model.exception.BusinessException;
-import com.avale.views.AlertFactory;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 
-public class FileTabController extends Controller {
+public class FileTabController extends Controller implements ApplicationContextAwareController {
 	@FXML
 	private TextArea configurationText;
 	@FXML
@@ -27,10 +27,6 @@ public class FileTabController extends Controller {
 	 * In case the configuration currently contains any encrypted property, then the settings are supposed to be frozen.
 	 */
 	private boolean encryptionSettingsAreFrozen = false;
-	/**
-	 * Factory for alert windows to inform user of errors or bad usage of the software.
-	 */
-	private AlertFactory alertFactory;
 
 	public FileTabController() {
 		super();
@@ -53,8 +49,6 @@ public class FileTabController extends Controller {
         algorithm.getItems().addAll(EncryptionSettings.availablePasswordBasedEncryptionAlgorithms());
 		configurationText.setEditable(false);
 		// TODO : make password not clearly displayed. Maybe use a formatter ?
-
-		this.alertFactory = new AlertFactory();
 	}
 
 	/** Called once the configuration to display have been loaded, whatever the way it have been loaded. */
@@ -64,6 +58,13 @@ public class FileTabController extends Controller {
 
 		configuration.encryptionSettings().ifPresent(this::applyPreviousEncryptionSettings);
 		configuration.onContentReplacement(this::applyReplacement);
+	}
+
+	/**
+	 * Factory for alert windows to inform user of errors or bad usage of the software.
+	 */
+	public AlertFactory getAlertFactory() {
+		return new AlertFactory(this.configMetadata.getScene().getWindow());
 	}
 
 	/**
@@ -110,10 +111,10 @@ public class FileTabController extends Controller {
 				new SimpleConfigurationEncryptor().encrypt(currentSelection(), configuration, getEncryptionSettings());
 			} catch (BusinessException exception) {
 				unlockEncryptionSetting();
-				alertFactory.reportError(exception);
+				getAlertFactory().reportError(exception);
 			}
 		} else {
-			alertFactory.warnUser("warning.precondition.encryption", "warning.precondition.encryption.description");
+			getAlertFactory().warnUser("warning.precondition.encryption", "warning.precondition.encryption.description");
 		}
 	}
 
@@ -139,7 +140,7 @@ public class FileTabController extends Controller {
 		if (encryptionSettingsAreValid()) {
 			new SimpleConfigurationEncryptor().decrypt(currentSelection(), configuration, getEncryptionSettings());
 		} else {
-			alertFactory.warnUser("warning.precondition.decryption", "warning.precondition.decryption.description");
+			getAlertFactory().warnUser("warning.precondition.decryption", "warning.precondition.decryption.description");
 		}
 	}
 
@@ -162,5 +163,10 @@ public class FileTabController extends Controller {
 		} else {
 			configuration.disable(ConfigurationFeatures.SAVE_META_DATA);
 		}
+	}
+
+	@Override
+	public Node getNode() {
+		return this.masterPassword;
 	}
 }

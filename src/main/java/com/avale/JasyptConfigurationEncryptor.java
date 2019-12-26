@@ -16,20 +16,15 @@ public class JasyptConfigurationEncryptor extends Application {
 	public static final String APPLICATION_LOGO                 = "images/application_logo.png";
 	public static final String MAIN_VIEW                        = "views/main.fxml";
 
-	private static ResourceBundle RESOURCE_BUNDLE;
-
-	public static synchronized ResourceBundle getBundle() {
-		if (RESOURCE_BUNDLE == null) RESOURCE_BUNDLE = ResourceBundle.getBundle(APPLICATION_RESOURCE_BUNDLE_NAME);
-		return RESOURCE_BUNDLE;
-	}
-
 	public static void main(String... program_arguments) {
 		launch(program_arguments);
 	}
 
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
-		ResourceBundle resourceBundle = getBundle();
+		ResourceBundle resourceBundle = ResourceBundle.getBundle(APPLICATION_RESOURCE_BUNDLE_NAME);
+		// make the resource bundle a window property so that any part of the GUI can provide localized message.
+		primaryStage.getProperties().put(ResourceBundle.class, resourceBundle);
 		Parent         rootGuiNode    = loadMainView(new ResourceLocator().locate(MAIN_VIEW), resourceBundle);
 
 		configureAppDisplay(primaryStage, resourceBundle.getString("application.title"));
