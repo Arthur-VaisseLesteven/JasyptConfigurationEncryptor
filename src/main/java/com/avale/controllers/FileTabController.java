@@ -1,14 +1,10 @@
 package com.avale.controllers;
 
-import com.avale.JasyptConfigurationEncryptor;
 import com.avale.model.*;
 import com.avale.model.exception.BusinessException;
-import javafx.event.ActionEvent;
+import com.avale.views.AlertFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
-import java.util.ResourceBundle;
-
 
 public class FileTabController extends Controller {
 	@FXML
@@ -31,6 +27,10 @@ public class FileTabController extends Controller {
 	 * In case the configuration currently contains any encrypted property, then the settings are supposed to be frozen.
 	 */
 	private boolean encryptionSettingsAreFrozen = false;
+	/**
+	 * Factory for alert windows to inform user of errors or bad usage of the software.
+	 */
+	private AlertFactory alertFactory;
 
 	public FileTabController() {
 		super();
@@ -53,6 +53,8 @@ public class FileTabController extends Controller {
         algorithm.getItems().addAll(EncryptionSettings.availablePasswordBasedEncryptionAlgorithms());
 		configurationText.setEditable(false);
 		// TODO : make password not clearly displayed. Maybe use a formatter ?
+
+		this.alertFactory = new AlertFactory();
 	}
 
 	/** Called once the configuration to display have been loaded, whatever the way it have been loaded. */
@@ -108,10 +110,10 @@ public class FileTabController extends Controller {
 				new SimpleConfigurationEncryptor().encrypt(currentSelection(), configuration, getEncryptionSettings());
 			} catch (BusinessException exception) {
 				unlockEncryptionSetting();
-				notifyActionFailure(exception);
+				alertFactory.reportError(exception);
 			}
 		} else {
-			//TODO gives the user a feedback !
+			alertFactory.warnUser("warning.precondition.encryption", "warning.precondition.encryption.description");
 		}
 	}
 
@@ -132,25 +134,12 @@ public class FileTabController extends Controller {
 		return new EncryptionSettings(algorithm.getValue(), masterPassword.getText(), numberOfIteration);
 	}
 
-	private void notifyActionFailure(BusinessException exception) {
-		// it really annoy me to have to us ethe singleton pattern here while the controller was initialized by a loader having a reference on the resource bundle...
-		// TODO : find the proper javaFx way to perform that kind of localization...
-		ResourceBundle bundle = JasyptConfigurationEncryptor.getBundle();
-		Alert alert = new Alert(Alert.AlertType.ERROR);
-		alert.setTitle(bundle.getString("error.title"));
-		alert.setHeaderText(bundle.getString(exception.getMessage()));
-		alert.setContentText(exception.getCause().toString());
-		exception.printStackTrace();
-
-		alert.show();
-	}
-
 	@FXML
-	private void decryptSelection(final ActionEvent actionEvent) {
+	private void decryptSelection() {
 		if (encryptionSettingsAreValid()) {
 			new SimpleConfigurationEncryptor().decrypt(currentSelection(), configuration, getEncryptionSettings());
 		} else {
-			// TODO gives the user a feedback
+			alertFactory.warnUser("warning.precondition.decryption", "warning.precondition.decryption.description");
 		}
 	}
 
