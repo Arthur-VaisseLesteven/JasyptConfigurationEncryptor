@@ -105,19 +105,15 @@ public class FileTabController extends Controller implements ApplicationContextA
 
 	@FXML
 	private void encryptSelection() {
-		if (currentSelection().isEmpty()) {
-			getAlertFactory().warnUser("warning.precondition.selection", "warning.precondition.selection.description");
-		} else if (!encryptionSettingsAreValid()) {
-			getAlertFactory().warnUser("warning.precondition.encryption", "warning.precondition.encryption.description");
-		} else {
+		validateInputAndThenRun(() -> {
 			lockEncryptionSettingToPreventInconsistency();
 			try {
 				new SimpleConfigurationEncryptor().encrypt(currentSelection(), configuration, getEncryptionSettings());
 			} catch (BusinessException exception) {
 				unlockEncryptionSetting();
-				getAlertFactory().reportError(exception);
+				throw exception;
 			}
-		}
+		}, "warning.precondition.encryption");
 	}
 
 	private boolean encryptionSettingsAreValid() {
@@ -137,19 +133,23 @@ public class FileTabController extends Controller implements ApplicationContextA
 		return new EncryptionSettings(algorithm.getValue(), masterPassword.getText(), numberOfIteration);
 	}
 
-	@FXML
-	private void decryptSelection() {
+	private void validateInputAndThenRun(Runnable process, String performedActionKey) {
 		if (currentSelection().isEmpty()) {
 			getAlertFactory().warnUser("warning.precondition.selection", "warning.precondition.selection.description");
 		} else if (!encryptionSettingsAreValid()) {
-			getAlertFactory().warnUser("warning.precondition.decryption", "warning.precondition.decryption.description");
+			getAlertFactory().warnUser(performedActionKey, performedActionKey + ".description");
 		} else {
 			try {
-				new SimpleConfigurationEncryptor().decrypt(currentSelection(), configuration, getEncryptionSettings());
+				process.run();
 			} catch (BusinessException exception) {
 				getAlertFactory().reportError(exception);
 			}
 		}
+	}
+
+	@FXML
+	private void decryptSelection() {
+		validateInputAndThenRun(() -> new SimpleConfigurationEncryptor().decrypt(currentSelection(), configuration, getEncryptionSettings()), "warning.precondition.decryption");
 	}
 
 	void revertLastChange() {
