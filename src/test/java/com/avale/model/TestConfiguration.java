@@ -1,7 +1,5 @@
 package com.avale.model;
 
-import com.avale.lang.strings.StringJoiner;
-
 import java.util.*;
 
 public class TestConfiguration extends BaseConfiguration {
@@ -26,7 +24,7 @@ public class TestConfiguration extends BaseConfiguration {
 		}
 
 		Builder withLines(String... lines) {
-			this.text = new StringJoiner("\n").join(Arrays.asList(lines));
+			this.text = String.join("\n", Arrays.asList(lines));
 			return this;
 		}
 
