@@ -48,7 +48,7 @@ public class FileTabController extends Controller implements ApplicationContextA
 
         algorithm.getItems().addAll(EncryptionSettings.availablePasswordBasedEncryptionAlgorithms());
 		configurationText.setEditable(false);
-		// TODO : make password not clearly displayed. Maybe use a formatter ?
+		// TODO : make password not clearly displayed. Whatever solution, a formatter is nog working. Maybe use a custom component ?
 	}
 
 	/** Called once the configuration to display have been loaded, whatever the way it have been loaded. */
@@ -138,7 +138,11 @@ public class FileTabController extends Controller implements ApplicationContextA
 	@FXML
 	private void decryptSelection() {
 		if (encryptionSettingsAreValid()) {
-			new SimpleConfigurationEncryptor().decrypt(currentSelection(), configuration, getEncryptionSettings());
+			try {
+				new SimpleConfigurationEncryptor().decrypt(currentSelection(), configuration, getEncryptionSettings());
+			} catch (BusinessException exception) {
+				getAlertFactory().reportError(exception);
+			}
 		} else {
 			getAlertFactory().warnUser("warning.precondition.decryption", "warning.precondition.decryption.description");
 		}

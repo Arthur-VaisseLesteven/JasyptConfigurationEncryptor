@@ -1,6 +1,7 @@
 package com.avale.model;
 
 
+import com.avale.model.exception.DecryptionFailedException;
 import com.avale.model.exception.EncryptionFailedException;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
@@ -10,13 +11,18 @@ import org.jasypt.salt.RandomSaltGenerator;
 public class SimpleConfigurationEncryptor {
 
 	private final StringEncryptorFactory stringEncryptorFactory;
+	private final StringDecryptorFactory stringDecryptorFactory;
 
 	public SimpleConfigurationEncryptor() {
-		this(encryptionSettings -> StringEncryptor.basedOn(standardJasyptStringEncryptor(encryptionSettings)::encrypt));
+		this(
+				encryptionSettings -> StringEncryptor.basedOn(standardJasyptStringEncryptor(encryptionSettings)::encrypt),
+				encryptionSettings -> StringDecryptor.basedOn(standardJasyptStringEncryptor(encryptionSettings)::decrypt)
+		);
 	}
 
-	SimpleConfigurationEncryptor(StringEncryptorFactory encryptorFactory) {
+	SimpleConfigurationEncryptor(StringEncryptorFactory encryptorFactory, StringDecryptorFactory decryptorFactory) {
 		this.stringEncryptorFactory = encryptorFactory;
+		this.stringDecryptorFactory = decryptorFactory;
 	}
 
 	/**
@@ -40,9 +46,14 @@ public class SimpleConfigurationEncryptor {
 	 * Decrypt's the selection of the configuration using the given encryption settings.
 	 */
 	public void decrypt(SimpleSelection simpleSelection, Configuration configuration, EncryptionSettings encryptionSettings) {
-		StringDecryptor jceStringEncryptor = StringDecryptor.basedOn(standardJasyptStringEncryptor(encryptionSettings)::decrypt);
+		StringDecryptor jceStringEncryptor = stringDecryptorFactory.generatesFrom(encryptionSettings);
 
-		String decryptedSelection = jceStringEncryptor.apply(simpleSelection.applyOn(configuration));
+		String decryptedSelection;
+		try {
+			decryptedSelection = jceStringEncryptor.apply(simpleSelection.applyOn(configuration));
+		} catch (RuntimeException exception) {
+			throw new DecryptionFailedException(exception);
+		}
 		Replacement replacement = new Replacement(simpleSelection.startIndex(), simpleSelection.endIndex(), decryptedSelection);
 		configuration.apply(replacement);
 	}
