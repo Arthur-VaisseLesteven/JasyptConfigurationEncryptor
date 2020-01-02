@@ -24,4 +24,8 @@ public class SimpleSelection implements Selection {
 	public int endIndex() {
 		return selectionEnd;
 	}
+
+	public boolean isEmpty() {
+		return selectionStart == selectionEnd;
+	}
 }

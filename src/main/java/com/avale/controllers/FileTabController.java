@@ -105,7 +105,11 @@ public class FileTabController extends Controller implements ApplicationContextA
 
 	@FXML
 	private void encryptSelection() {
-		if (encryptionSettingsAreValid()) {
+		if (currentSelection().isEmpty()) {
+			getAlertFactory().warnUser("warning.precondition.selection", "warning.precondition.selection.description");
+		} else if (!encryptionSettingsAreValid()) {
+			getAlertFactory().warnUser("warning.precondition.encryption", "warning.precondition.encryption.description");
+		} else {
 			lockEncryptionSettingToPreventInconsistency();
 			try {
 				new SimpleConfigurationEncryptor().encrypt(currentSelection(), configuration, getEncryptionSettings());
@@ -113,8 +117,6 @@ public class FileTabController extends Controller implements ApplicationContextA
 				unlockEncryptionSetting();
 				getAlertFactory().reportError(exception);
 			}
-		} else {
-			getAlertFactory().warnUser("warning.precondition.encryption", "warning.precondition.encryption.description");
 		}
 	}
 
@@ -137,14 +139,16 @@ public class FileTabController extends Controller implements ApplicationContextA
 
 	@FXML
 	private void decryptSelection() {
-		if (encryptionSettingsAreValid()) {
+		if (currentSelection().isEmpty()) {
+			getAlertFactory().warnUser("warning.precondition.selection", "warning.precondition.selection.description");
+		} else if (!encryptionSettingsAreValid()) {
+			getAlertFactory().warnUser("warning.precondition.decryption", "warning.precondition.decryption.description");
+		} else {
 			try {
 				new SimpleConfigurationEncryptor().decrypt(currentSelection(), configuration, getEncryptionSettings());
 			} catch (BusinessException exception) {
 				getAlertFactory().reportError(exception);
 			}
-		} else {
-			getAlertFactory().warnUser("warning.precondition.decryption", "warning.precondition.decryption.description");
 		}
 	}
 
