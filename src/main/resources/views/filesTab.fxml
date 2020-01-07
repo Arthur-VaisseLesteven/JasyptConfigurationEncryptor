@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.PasswordField?>
 <SplitPane dividerPositions="0.8" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
            minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.172-ea"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avale.controllers.FileTabController">
@@ -25,7 +26,7 @@
         <TitledPane text="%sidebar.config.title">
             <VBox prefHeight="200.0" prefWidth="100.0">
                 <Label text="%sidebar.config.password"/>
-                <TextField fx:id="masterPassword" promptText="%sidebar.config.hints.password"/>
+                <PasswordField fx:id="masterPassword" promptText="%sidebar.config.hints.password"/>
                 <Label text="%sidebar.config.iterations">
                     <VBox.margin>
                         <Insets top="5.0"/>
