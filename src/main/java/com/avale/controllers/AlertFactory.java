@@ -2,7 +2,13 @@ package com.avale.controllers;
 
 import com.avale.model.exception.BusinessException;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Window;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 
 public class AlertFactory implements ApplicationContextAware {
@@ -18,10 +24,25 @@ public class AlertFactory implements ApplicationContextAware {
 		alert.initOwner(getWindow());
 		alert.setTitle(getResourceBundle().getString("error.title"));
 		alert.setHeaderText(getResourceBundle().getString(exception.getMessage()));
-		alert.setContentText(exception.getCause().toString());
-		exception.printStackTrace();
+		alert.getDialogPane().setExpandableContent(getStacktraceDisplay(exception));
 
 		alert.show();
+	}
+
+	private GridPane getStacktraceDisplay(BusinessException exception) {
+		StringWriter writer = new StringWriter();
+		exception.printStackTrace(new PrintWriter(writer));
+
+		TextArea exceptionStacktraceDisplay = new TextArea(writer.toString());
+		exceptionStacktraceDisplay.setMaxHeight(Double.MAX_VALUE);
+		exceptionStacktraceDisplay.setMaxWidth(Double.MAX_VALUE);
+		GridPane.setVgrow(exceptionStacktraceDisplay, Priority.ALWAYS);
+		GridPane.setHgrow(exceptionStacktraceDisplay, Priority.ALWAYS);
+
+		GridPane displayWrapper = new GridPane();
+		displayWrapper.setMaxWidth(Double.MAX_VALUE);
+		displayWrapper.add(exceptionStacktraceDisplay, 0, 0);
+		return displayWrapper;
 	}
 
 	void warnUser(String messageHeaderKey, String messageContentKey) {
