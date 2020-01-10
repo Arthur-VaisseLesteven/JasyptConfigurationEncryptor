@@ -10,6 +10,7 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Objects;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
 public class ConfigurationFileTest {
 
 	private static final String TEST_TEXT_FILE = "simpleText.txt";
+	private static final String TEST_ANSI_TEXT_FILE = "ansi.cfg";
 	private static final String TEST_FILE_WITH_ENCRYPTION_SETTINGS = "fileWithEncryptionSettings.properties";
 
 	@Test
@@ -71,12 +73,16 @@ public class ConfigurationFileTest {
 	public void constructor_failsUponNonTextFile() {
 		assertThatThrownBy(() -> configurationBasedOnFile("application_logo.png"))
 				.isInstanceOf(InvalidFileException.class)
-				.hasMessage("error.file.content");
+				.hasMessage("error.file.encoding");
 	}
 
 	private ConfigurationFile configurationBasedOnFile(final String s) {
+		return configurationBasedOnFile(s, StandardCharsets.UTF_8);
+	}
+
+	private ConfigurationFile configurationBasedOnFile(final String s, Charset charset) {
 		URL url = Objects.requireNonNull(getClass().getClassLoader().getResource(s), "Failed to find the test file.");
-		return new ConfigurationFile(new File(url.getFile()));
+		return new ConfigurationFile(new File(url.getFile()), charset);
 	}
 
 	@Test
@@ -92,6 +98,11 @@ public class ConfigurationFileTest {
 	@Test
 	public void constructor_retrievesExistingEncryptionSettings() {
 		assertThat(configurationBasedOnFile(TEST_FILE_WITH_ENCRYPTION_SETTINGS).encryptionSettings()).contains(new EncryptionSettings("PBEWITHMD5ANDDES", null, 666));
+	}
+
+	@Test
+	public void constructor_usesProvidedEncoding() {
+		assertThat(configurationBasedOnFile(TEST_ANSI_TEXT_FILE, Charset.forName("windows-1252")).text()).isEqualTo("testProperty windows-1252 encoded é@€DCDOS~~#{[|`\\");
 	}
 
 	@Test

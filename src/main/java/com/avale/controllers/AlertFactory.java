@@ -2,6 +2,7 @@ package com.avale.controllers;
 
 import com.avale.model.exception.BusinessException;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -9,17 +10,18 @@ import javafx.stage.Window;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Optional;
 
 
 public class AlertFactory implements ApplicationContextAware {
 
 	private final Window window;
 
-	AlertFactory(Window window) {
+	public AlertFactory(Window window) {
 		this.window = window;
 	}
 
-	void reportError(BusinessException exception) {
+	public void reportError(BusinessException exception) {
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.initOwner(getWindow());
 		alert.setTitle(getResourceBundle().getString("error.title"));
@@ -45,7 +47,7 @@ public class AlertFactory implements ApplicationContextAware {
 		return displayWrapper;
 	}
 
-	void warnUser(String messageHeaderKey, String messageContentKey) {
+	public void warnUser(String messageHeaderKey, String messageContentKey) {
 		Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.initOwner(getWindow());
 		alert.setTitle(getResourceBundle().getString("warning.title"));
@@ -53,6 +55,15 @@ public class AlertFactory implements ApplicationContextAware {
 		alert.setContentText(getResourceBundle().getString(messageContentKey));
 
 		alert.show();
+	}
+
+	public <T> Optional<T> askUserInput(String questionTitle, String questionKey, T... choices) {
+		ChoiceDialog<T> choiceDialog = new ChoiceDialog<>(choices[0], choices);
+
+		choiceDialog.setTitle(getResourceBundle().getString(questionTitle));
+		choiceDialog.setContentText(getResourceBundle().getString(questionKey));
+
+		return choiceDialog.showAndWait();
 	}
 
 	@Override

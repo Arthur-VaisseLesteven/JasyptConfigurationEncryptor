@@ -1,9 +1,12 @@
 package com.avale.model;
 
+import com.avale.model.exception.BadEncodingException;
 import com.avale.model.exception.BusinessException;
 import com.avale.model.exception.InvalidFileException;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +18,10 @@ public class ConfigurationFile extends BaseConfiguration {
 
 	/** The file holding the configuration */
 	private final File   file;
+	/**
+	 * The charset used to read/write the file
+	 */
+	private final Charset charset;
 	/** The configuration file lines. */
 	private       String configurationText;
 	/**
@@ -23,8 +30,13 @@ public class ConfigurationFile extends BaseConfiguration {
 	private EncryptionSettings encryptionSettings;
 
 	public ConfigurationFile(final File file) {
+		this(file, StandardCharsets.UTF_8);
+	}
+
+	public ConfigurationFile(final File file, Charset charset) {
 		validatesInput(file);
 		this.file = file;
+		this.charset = Objects.requireNonNull(charset);
 		configurationText = loadConfigurationContent(file);
 		encryptionSettings = loadEncryptionSettings();
 	}
@@ -37,7 +49,9 @@ public class ConfigurationFile extends BaseConfiguration {
 
 	private String loadConfigurationContent(final File file) {
 		try {
-			return String.join("\n", Files.readAllLines(file.toPath()));
+			return String.join("\n", Files.readAllLines(file.toPath(), this.charset));
+		} catch (MalformedInputException exception) {
+			throw new BadEncodingException(exception); // TODO add test for this behavior. Add catch block asking the user how to reload the file.
 		} catch (IOException e) {
 			// this point is reached when opening non text file that can't be read line by line.
 			throw new InvalidFileException("error.file.content");
@@ -47,7 +61,7 @@ public class ConfigurationFile extends BaseConfiguration {
 	private EncryptionSettings loadEncryptionSettings() {
 		try {
 			return findEncryptionSettingFile().map(this::loadEncryptionSettings).orElse(null);
-		} catch (IOException e) { // TODO probably not the good way to handle this... but can't figure out what to do for now.
+		} catch (IOException e) {
 			System.out.println("Encountered an exception while trying to load EncryptionSettings of " + file.getAbsolutePath() + " : " + e.getMessage());
 			e.printStackTrace();
 			return null;
@@ -126,7 +140,8 @@ public class ConfigurationFile extends BaseConfiguration {
 			try (FileOutputStream outputStream = new FileOutputStream(findEncryptionSettingFile().orElse(Paths.get(this.file.getParent() + File.separator + this.encryptionSettingsFileName())).toFile())) {
 				encryptionSettings.toProperties().store(outputStream, null);
 			} catch (IOException exception) {
-				throw new IllegalStateException("Not Yet Implemented");
+				System.out.println("Failed to save encryption metadata.");
+				exception.printStackTrace();
 			}
 		}
 	}
