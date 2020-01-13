@@ -5,6 +5,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -13,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.PasswordField?>
 <SplitPane dividerPositions="0.8" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
            minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.172-ea"
            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.avale.controllers.FileTabController">
@@ -55,16 +55,42 @@
                 <VBox alignment="CENTER" spacing="5.0">
                     <children>
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#encryptSelection"
-                                text="%sidebar.actions.encryptSelection">
+                                text="%sidebar.encryption.actions.encryptSelection">
                             <tooltip>
-                                <Tooltip text="%sidebar.actions.hints.encryptSelection"/>
+                                <Tooltip text="%sidebar.encryption.actions.hints.encryptSelection"/>
                             </tooltip>
                         </Button>
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#decryptSelection"
-                                text="%sidebar.actions.decryptSelection">
+                                text="%sidebar.encryption.actions.decryptSelection">
                             <tooltip>
-                                <Tooltip text="%sidebar.actions.hints.decryptSelection"/>
+                                <Tooltip text="%sidebar.encryption.actions.hints.decryptSelection"/>
                             </tooltip>
+                        </Button>
+                    </children>
+                </VBox>
+            </content>
+        </TitledPane>
+        <TitledPane animated="false" text="%sidebar.regexp.title">
+            <content>
+                <VBox prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <Label text="%sidebar.regexp.label"/>
+                        <TextField promptText="%sidebar.regexp.hint">
+                            <tooltip>
+                                <Tooltip text="%sidebar.regexp.tooltip"/>
+                            </tooltip>
+                        </TextField>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                text="%sidebar.regexp.actions.selectNext">
+                            <VBox.margin>
+                                <Insets top="5.0"/>
+                            </VBox.margin>
+                        </Button>
+                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                text="%sidebar.regexp.actions.encryptAllMatches">
+                            <VBox.margin>
+                                <Insets top="5.0"/>
+                            </VBox.margin>
                         </Button>
                     </children>
                 </VBox>

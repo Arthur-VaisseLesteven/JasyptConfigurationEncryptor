@@ -4,5 +4,5 @@ allow to select string to encrypt by regexp
 allow to edit configuration files
 on large file do not require to scroll down upon each encryption
 save password in metadata encrypted asking for a master password upon save/load :) ? does it sounds good ? :)
-use dedicated threads to proceed to encryption instead of stealing the main application thread!
+use dedicated threads to proceed to encryption instead of stealing the main application thread! <- not really a need for now... didn't had any unacceptable lag issue.
 enhance readme to add some usage animated gifs....
