@@ -128,21 +128,28 @@ public class ConfigurationFile extends BaseConfiguration {
 
 	@Override
 	public void save() {
+		saveConfiguration();
+		if (isEnabled(ConfigurationFeatures.SAVE_META_DATA)) {
+			saveMetaData();
+		}
+	}
+
+	private void saveConfiguration() {
 		try {
 			Path tempFile = Files.createTempFile(null, ".tmp");
-			Files.write(tempFile, this.text().getBytes(StandardCharsets.UTF_8));
+			Files.write(tempFile, this.text().getBytes(this.charset));
 			Files.move(tempFile, this.file.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
 		} catch (IOException ioException) {
 			throw new BusinessException("error.configuration.save", ioException);
 		}
+	}
 
-		if (isEnabled(ConfigurationFeatures.SAVE_META_DATA)) {
-			try (FileOutputStream outputStream = new FileOutputStream(findEncryptionSettingFile().orElse(Paths.get(this.file.getParent() + File.separator + this.encryptionSettingsFileName())).toFile())) {
-				encryptionSettings.toProperties().store(outputStream, null);
-			} catch (IOException exception) {
-				System.out.println("Failed to save encryption metadata.");
-				exception.printStackTrace();
-			}
+	private void saveMetaData() {
+		try (FileOutputStream outputStream = new FileOutputStream(findEncryptionSettingFile().orElse(Paths.get(this.file.getParent() + File.separator + this.encryptionSettingsFileName())).toFile())) {
+			encryptionSettings.toProperties().store(outputStream, null);
+		} catch (IOException exception) {
+			System.out.println("Failed to save encryption metadata.");
+			exception.printStackTrace();
 		}
 	}
 }
