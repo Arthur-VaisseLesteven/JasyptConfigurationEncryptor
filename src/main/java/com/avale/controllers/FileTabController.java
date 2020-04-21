@@ -6,6 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class FileTabController extends Controller implements ApplicationContextAwareController {
 	@FXML
 	private TextArea configurationText;
@@ -16,12 +19,14 @@ public class FileTabController extends Controller implements ApplicationContextA
 	@FXML
 	private TextField masterPassword;
 	@FXML
+	private TextField regexp;
+	@FXML
 	private CheckBox configMetadata;
 
 	/**
 	 * Model object of this controller.
 	 */
-    private Configuration configuration;
+	private Configuration configuration;
 	/**
 	 * Indicates whether the encryption settings are frozen, and should not get editable again.
 	 * In case the configuration currently contains any encrypted property, then the settings are supposed to be frozen.
@@ -30,13 +35,6 @@ public class FileTabController extends Controller implements ApplicationContextA
 
 	public FileTabController() {
 		super();
-	}
-
-	/**
-	 * Dependency Injection Constructor aiming at easing testing.
-	 */
-	protected FileTabController(TextArea configurationText, ChoiceBox<String> algorithm, TextField encryptIteration, TextField masterPassword) {
-
 	}
 
 	@Override
@@ -48,7 +46,6 @@ public class FileTabController extends Controller implements ApplicationContextA
 
         algorithm.getItems().addAll(EncryptionSettings.availablePasswordBasedEncryptionAlgorithms());
 		configurationText.setEditable(false);
-		// TODO : make password not clearly displayed. Whatever solution, a formatter is nog working. Maybe use a custom component ?
 	}
 
 	/** Called once the configuration to display have been loaded, whatever the way it have been loaded. */
@@ -83,6 +80,16 @@ public class FileTabController extends Controller implements ApplicationContextA
 	 */
 	private void applyReplacement(final ConfigurationChange change) {
 		this.configurationText.setText(change.finalValue);
+		selectConfigurationBetween(change.startOfChangeIndex(), change.endOfChangeIndex());
+	}
+
+	/**
+	 * Select the content between given index on the configuration content.
+	 */
+	private void selectConfigurationBetween(int bound, int otherBound) {
+		this.configurationText.positionCaret(Math.min(bound, otherBound));
+		this.configurationText.selectPositionCaret(Math.max(bound, otherBound));
+//		this.configurationText.selectRange(Math.min(bound, otherBound), Math.max(bound, otherBound));
 	}
 
 	/**
@@ -176,5 +183,34 @@ public class FileTabController extends Controller implements ApplicationContextA
 	@Override
 	public Node getNode() {
 		return this.masterPassword;
+	}
+
+
+	@FXML
+	public boolean selectNextMatchingSequence() {
+		if (!regexp.getText().isEmpty()) {
+			Pattern pattern = Pattern.compile("(?m)^" + regexp.getText() + "$");
+			Matcher matcher = pattern.matcher(configuration.text());
+			if (matcher.groupCount() != 1) {
+				getAlertFactory().warnUser("warning.precondition.regexp", "warning.precondition.regexp.description"); // todo : a definir dans le resource bundle
+			}
+
+			if (matcher.find(configurationText.getCaretPosition()) || matcher.find()) { // XXX - the select from current position or from start of the text allow to select next occurrence, using circular search and starting again from start of content once the end have been reached
+				selectConfigurationBetween(matcher.start(1), matcher.end(1));
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	@FXML
+	public void encryptAllMatchingSequences() {
+		// todo find a better implementation, because this one sucks and easily trigger infinite loop... this is sad because I found it elegant at first! :')
+//		while (selectNextMatchingSequence()) {
+//			encryptSelection();
+//		}
 	}
 }

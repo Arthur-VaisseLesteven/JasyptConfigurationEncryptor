@@ -31,7 +31,7 @@ public class FileTabControllerTest {
 		encryptIteration = mock(TextField.class);
 		masterPassword = mock(TextField.class);
 
-		controller = new FileTabController(configurationText, algorithm, encryptIteration, masterPassword);
+		//controller = new FileTabController(configurationText, algorithm, encryptIteration, masterPassword); fully qualified constructor goes here
 	}
 
 	@Test

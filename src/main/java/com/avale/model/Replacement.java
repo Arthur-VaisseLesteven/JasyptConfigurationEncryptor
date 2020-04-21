@@ -32,7 +32,6 @@ public class Replacement {
 
 	@Override
 	public int hashCode() {
-
 		return Objects.hash(fragmentToReplaceStart, fragmentToReplaceEnd, replacement);
 	}
 
@@ -43,5 +42,13 @@ public class Replacement {
 				", fragmentToReplaceEnd=" + fragmentToReplaceEnd +
 				", replacement='" + replacement + '\'' +
 				'}';
+	}
+
+	public int start() {
+		return fragmentToReplaceStart;
+	}
+
+	public int endOfChange() {
+		return fragmentToReplaceStart + replacement.length();
 	}
 }

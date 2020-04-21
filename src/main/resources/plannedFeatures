@@ -1,6 +1,5 @@
 fix build on github -- will be fixed by moving to java11 :)
 allow to change encryption setting on a loaded file whose all encrypted values have been decrypted.
-allow to select string to encrypt by regexp
 allow to edit configuration files
 on large file do not require to scroll down upon each encryption
 save password in metadata encrypted asking for a master password upon save/load :) ? does it sounds good ? :)

@@ -14,6 +14,14 @@ public class ConfigurationChange {
 
 	}
 
+	public int startOfChangeIndex() {
+		return replacement.start();
+	}
+
+	public int endOfChangeIndex() {
+		return replacement.endOfChange();
+	}
+
 	static ConfigurationChange applyingReplacementOn(Replacement replacement, String configurationText) {
 		return new ConfigurationChange(replacement, configurationText, replacement.applyOn(configurationText));
 	}

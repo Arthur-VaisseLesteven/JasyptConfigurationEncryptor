@@ -75,19 +75,20 @@
                 <VBox prefHeight="200.0" prefWidth="100.0">
                     <children>
                         <Label text="%sidebar.regexp.label"/>
-                        <TextField promptText="%sidebar.regexp.hint">
+                        <TextField fx:id="regexp" promptText="%sidebar.regexp.hint">
                             <tooltip>
                                 <Tooltip text="%sidebar.regexp.tooltip"/>
                             </tooltip>
                         </TextField>
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                text="%sidebar.regexp.actions.selectNext">
+                                text="%sidebar.regexp.actions.selectNext" onAction="#selectNextMatchingSequence">
                             <VBox.margin>
                                 <Insets top="5.0"/>
                             </VBox.margin>
                         </Button>
                         <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                text="%sidebar.regexp.actions.encryptAllMatches">
+                                text="%sidebar.regexp.actions.encryptAllMatches"
+                                onAction="#encryptAllMatchingSequences">
                             <VBox.margin>
                                 <Insets top="5.0"/>
                             </VBox.margin>
